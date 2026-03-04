@@ -1,8 +1,21 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { useScrolled } from '@/hooks/useScrolled';
 
 export default function Nav() {
   const scrolled = useScrolled();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  const navLinks = ['Features', 'How It Works', 'Pricing'];
+
   return (
     <nav
       style={{
@@ -12,11 +25,10 @@ export default function Nav() {
         right: 0,
         zIndex: 50,
         transition: 'all .3s',
-        // 🎨 EDIT: bg-bg-app at 92% opacity
-        background: scrolled ? 'rgba(10,10,10,0.92)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(14px)' : 'none',
-        // 🎨 EDIT: border-border-subtle
-        borderBottom: scrolled ? '1px solid #1E1E1E' : 'none',
+        background:
+          scrolled || menuOpen ? 'rgba(10,10,10,0.92)' : 'transparent',
+        backdropFilter: scrolled || menuOpen ? 'blur(14px)' : 'none',
+        borderBottom: scrolled || menuOpen ? '1px solid #1E1E1E' : 'none',
       }}
     >
       <div
@@ -31,75 +43,219 @@ export default function Nav() {
         }}
       >
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            cursor: 'pointer',
+          }}
+        >
+          {/* Modern C logo mark */}
           <div
             style={{
-              width: 28,
-              height: 28,
-              borderRadius: 8,
-              background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+              width: 32,
+              height: 32,
+              borderRadius: 9,
+              background: 'linear-gradient(135deg, #3B82F6, #1E40AF)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              boxShadow: '0 0 12px rgba(59,130,246,0.4)',
+              flexShrink: 0,
             }}
           >
-            {/* 🎨 EDIT gradient: bg-gradient-primary */}
-            <span style={{ color: '#fff', fontSize: 12, fontWeight: 900 }}>
+            <span
+              style={{
+                color: '#fff',
+                fontSize: 16,
+                fontWeight: 900,
+                letterSpacing: '-0.05em',
+                fontFamily: 'Georgia, serif',
+                lineHeight: 1,
+              }}
+            >
               C
             </span>
           </div>
-          {/* 🎨 EDIT: text-text-primary */}
+          {/* Wordmark */}
           <span
             style={{
               color: '#F5F5F5',
               fontWeight: 700,
-              fontSize: 18,
-              letterSpacing: '-0.02em',
+              fontSize: 17,
+              letterSpacing: '-0.03em',
+              lineHeight: 1,
             }}
           >
-            ClarityAI
+            Clarity
+            <span style={{ color: '#3B82F6' }}>AI</span>
           </span>
         </div>
-        {/* Links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-          {['Features', 'How It Works', 'Pricing'].map((l) => (
-            <a
-              key={l}
-              href="#"
-              // 🎨 EDIT: text-text-muted hover:text-text-primary
+
+        {/* Desktop links */}
+        {!isMobile && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
+            {navLinks.map((l) => (
+              <span
+                key={l}
+                style={{
+                  fontSize: 14,
+                  color: '#B3B3B3',
+                  cursor: 'pointer',
+                  transition: 'color .2s',
+                  fontWeight: 500,
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F5F5')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#B3B3B3')}
+              >
+                {l}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Right side */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {/* Desktop CTA */}
+          {!isMobile && (
+            <button
               style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '9px 20px',
+                borderRadius: 10,
+                background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+                color: '#fff',
                 fontSize: 14,
-                color: '#B3B3B3', // 🎨 text.secondary — visible by default
-                textDecoration: 'none',
-                transition: 'color .2s',
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 0 16px rgba(59,130,246,0.25)',
+                transition: 'opacity .2s',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F5F5')} // 🎨 text.primary on hover
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#B3B3B3')} // 🎨 back to secondary
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
-              {l}
-            </a>
-          ))}
+              Get Started Free
+            </button>
+          )}
+
+          {/* Hamburger — mobile only */}
+          {isMobile && (
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 5,
+              }}
+              aria-label="Toggle menu"
+            >
+              <span
+                style={{
+                  display: 'block',
+                  width: 22,
+                  height: 2,
+                  background: '#F5F5F5',
+                  borderRadius: 2,
+                  transition: 'all .25s',
+                  transform: menuOpen
+                    ? 'translateY(7px) rotate(45deg)'
+                    : 'none',
+                }}
+              />
+              <span
+                style={{
+                  display: 'block',
+                  width: 22,
+                  height: 2,
+                  background: '#F5F5F5',
+                  borderRadius: 2,
+                  transition: 'all .25s',
+                  opacity: menuOpen ? 0 : 1,
+                }}
+              />
+              <span
+                style={{
+                  display: 'block',
+                  width: 22,
+                  height: 2,
+                  background: '#F5F5F5',
+                  borderRadius: 2,
+                  transition: 'all .25s',
+                  transform: menuOpen
+                    ? 'translateY(-7px) rotate(-45deg)'
+                    : 'none',
+                }}
+              />
+            </button>
+          )}
         </div>
-        {/* CTA */}
-        <a
-          href="#"
-          // 🎨 EDIT: bg-gradient-primary
+      </div>
+
+      {/* Mobile dropdown */}
+      {isMobile && (
+        <div
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '8px 18px',
-            borderRadius: 10,
-            background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-            color: '#fff',
-            fontSize: 14,
-            fontWeight: 600,
-            textDecoration: 'none',
+            overflow: 'hidden',
+            maxHeight: menuOpen ? 320 : 0,
+            transition: 'max-height .3s ease',
+            borderTop: menuOpen ? '1px solid #1E1E1E' : 'none',
           }}
         >
-          Get Started Free
-        </a>
-      </div>
+          <div
+            style={{
+              padding: '12px 24px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 0,
+            }}
+          >
+            {navLinks.map((l) => (
+              <span
+                key={l}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  fontSize: 15,
+                  color: '#B3B3B3',
+                  cursor: 'pointer',
+                  padding: '14px 0',
+                  borderBottom: '1px solid #1E1E1E',
+                  transition: 'color .2s',
+                  fontWeight: 500,
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F5F5')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#B3B3B3')}
+              >
+                {l}
+              </span>
+            ))}
+            <button
+              onClick={() => setMenuOpen(false)}
+              style={{
+                marginTop: 16,
+                padding: '13px 24px',
+                borderRadius: 10,
+                background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+                color: '#fff',
+                fontSize: 15,
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                width: '100%',
+                boxShadow: '0 0 16px rgba(59,130,246,0.25)',
+              }}
+            >
+              Get Started Free
+            </button>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
