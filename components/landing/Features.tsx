@@ -39,6 +39,7 @@ export default function Features() {
   return (
     // 🎨 EDIT: bg-bg-app
     <section
+      id="features"
       style={{
         background: '#0A0A0A',
         padding: '96px 24px',
@@ -153,7 +154,7 @@ export default function Features() {
                   {f.title}
                 </h3>
                 {/* 🎨 EDIT: text-text-muted */}
-                <p style={{ fontSize: 13, color: '#737373', lineHeight: 1.65 }}>
+                <p style={{ fontSize: 13, color: '#B3B3B3', lineHeight: 1.65 }}>
                   {f.desc}
                 </p>
               </div>

@@ -100,7 +100,7 @@ export default function FinalCTA() {
               Analyze Your Resume Free <Ic.Arrow />
             </a>
             {/* 🎨 EDIT: text-text-muted */}
-            <p style={{ marginTop: 16, fontSize: 13, color: '#737373' }}>
+            <p style={{ marginTop: 16, fontSize: 13, color: '#B3B3B3' }}>
               No credit card required · 5 free analyses/month
             </p>
           </div>

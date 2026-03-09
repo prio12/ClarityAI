@@ -26,7 +26,10 @@ const steps = [
 export default function HowItWorks() {
   return (
     // 🎨 EDIT: bg-bg-app
-    <section style={{ background: '#0A0A0A', padding: '96px 24px' }}>
+    <section
+      id="how-it-works"
+      style={{ background: '#0A0A0A', padding: '96px 24px' }}
+    >
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
         <FadeIn>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -127,7 +130,7 @@ export default function HowItWorks() {
                   {s.title}
                 </h3>
                 {/* 🎨 EDIT: text-text-muted */}
-                <p style={{ fontSize: 14, color: '#737373', lineHeight: 1.65 }}>
+                <p style={{ fontSize: 14, color: '#B3B3B3', lineHeight: 1.65 }}>
                   {s.body}
                 </p>
               </div>

@@ -127,7 +127,7 @@ export default function ProblemSection() {
                   {p.title}
                 </h3>
                 {/* 🎨 EDIT: text-text-muted */}
-                <p style={{ fontSize: 14, color: '#737373', lineHeight: 1.65 }}>
+                <p style={{ fontSize: 14, color: '#B3B3B3', lineHeight: 1.65 }}>
                   {p.body}
                 </p>
               </div>

@@ -288,7 +288,7 @@ export default function Hero() {
                   padding: '0 10px',
                 }}
               >
-                <span style={{ fontSize: 11, color: '#737373' }}>
+                <span style={{ fontSize: 11, color: '#B3B3B3' }}>
                   app.clarityai.com/analyze
                 </span>
               </div>
@@ -319,7 +319,7 @@ export default function Hero() {
                       }}
                     >
                       {/* 🎨 EDIT: text-text-muted */}
-                      <span style={{ fontSize: 11, color: '#737373' }}>
+                      <span style={{ fontSize: 11, color: '#B3B3B3' }}>
                         {label}
                       </span>
                       {/* 🎨 EDIT: text-brand-light */}
@@ -392,7 +392,7 @@ export default function Hero() {
           style={{
             marginTop: 16,
             fontSize: 12,
-            color: '#737373',
+            color: '#B3B3B3',
             animation: 'hfd .5s ease .5s both',
           }}
         >

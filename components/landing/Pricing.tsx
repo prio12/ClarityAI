@@ -91,7 +91,7 @@ export default function Pricing() {
             >
               Simple, honest pricing.
             </h2>
-            <p style={{ fontSize: 16, color: '#737373' }}>
+            <p style={{ fontSize: 16, color: '#B3B3B3' }}>
               Start free. No credit card required.
             </p>
           </div>
@@ -150,7 +150,7 @@ export default function Pricing() {
               >
                 Free
               </h3>
-              <p style={{ fontSize: 13, color: '#737373', marginBottom: 20 }}>
+              <p style={{ fontSize: 13, color: '#B3B3B3', marginBottom: 20 }}>
                 Everything free while we're in beta.
               </p>
 
@@ -172,7 +172,7 @@ export default function Pricing() {
                 >
                   $0
                 </span>
-                <span style={{ fontSize: 13, color: '#737373' }}>/month</span>
+                <span style={{ fontSize: 13, color: '#B3B3B3' }}>/month</span>
               </div>
 
               <ul
@@ -269,7 +269,7 @@ export default function Pricing() {
                   borderRadius: 999,
                   background: '#1A1A1A',
                   border: '1px solid #2D2D2D',
-                  color: '#737373',
+                  color: '#B3B3B3',
                   fontSize: 11,
                   fontWeight: 700,
                   whiteSpace: 'nowrap',
@@ -282,13 +282,13 @@ export default function Pricing() {
                 style={{
                   fontSize: 20,
                   fontWeight: 700,
-                  color: '#F5F5F5',
+                  color: '#B3B3B3',
                   marginBottom: 4,
                 }}
               >
                 Pro
               </h3>
-              <p style={{ fontSize: 13, color: '#737373', marginBottom: 20 }}>
+              <p style={{ fontSize: 13, color: '#B3B3B3', marginBottom: 20 }}>
                 For serious job seekers who want every edge.
               </p>
 
@@ -310,7 +310,7 @@ export default function Pricing() {
                 >
                   $4.99
                 </span>
-                <span style={{ fontSize: 13, color: '#737373' }}>/month</span>
+                <span style={{ fontSize: 13, color: '#B3B3B3' }}>/month</span>
               </div>
 
               <ul
@@ -332,7 +332,7 @@ export default function Pricing() {
                       alignItems: 'center',
                       gap: 12,
                       fontSize: 14,
-                      color: '#737373',
+                      color: '#B3B3B3',
                     }}
                   >
                     <span
@@ -346,7 +346,7 @@ export default function Pricing() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
-                        color: '#404040',
+                        color: '#B3B3B3',
                       }}
                     >
                       <CheckIcon />
@@ -368,7 +368,7 @@ export default function Pricing() {
                   fontSize: 14,
                   border: '1px solid #2D2D2D',
                   background: 'transparent',
-                  color: '#404040',
+                  color: '#B3B3B3',
                   cursor: 'not-allowed',
                 }}
               >
@@ -384,7 +384,7 @@ export default function Pricing() {
             style={{
               textAlign: 'center',
               fontSize: 12,
-              color: '#737373',
+              color: '#B3B3B3',
               marginTop: 24,
             }}
           >

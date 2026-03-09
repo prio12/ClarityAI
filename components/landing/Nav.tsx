@@ -14,7 +14,16 @@ export default function Nav() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const navLinks = ['Features', 'How It Works', 'Pricing'];
+  const navLinks = [
+    { label: 'Features', id: 'features' },
+    { label: 'How It Works', id: 'how-it-works' },
+    { label: 'Pricing', id: 'pricing' },
+  ];
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setMenuOpen(false); // closes mobile menu if open
+  };
 
   return (
     <nav
@@ -98,7 +107,8 @@ export default function Nav() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
             {navLinks.map((l) => (
               <span
-                key={l}
+                key={l.label}
+                onClick={() => scrollTo(l.id)}
                 style={{
                   fontSize: 14,
                   color: '#B3B3B3',
@@ -109,7 +119,7 @@ export default function Nav() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F5F5')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = '#B3B3B3')}
               >
-                {l}
+                {l.label}
               </span>
             ))}
           </div>
@@ -218,8 +228,8 @@ export default function Nav() {
           >
             {navLinks.map((l) => (
               <span
-                key={l}
-                onClick={() => setMenuOpen(false)}
+                key={l.label}
+                onClick={() => scrollTo(l.id)}
                 style={{
                   fontSize: 15,
                   color: '#B3B3B3',
@@ -232,7 +242,7 @@ export default function Nav() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F5F5')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = '#B3B3B3')}
               >
-                {l}
+                {l.label}
               </span>
             ))}
             <button

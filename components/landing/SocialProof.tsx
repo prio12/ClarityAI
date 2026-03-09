@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
+import { useState, useEffect } from 'react';
 import { FadeIn } from '@/components/shared/FadeIn';
 import { Ic } from '@/components/shared/Icons';
 import { useCounter } from '@/hooks/useCounter';
@@ -35,7 +36,6 @@ const testimonials = [
   },
 ];
 
-// Stat item uses the useCounter hook directly
 function StatItem({
   to,
   suffix,
@@ -47,7 +47,6 @@ function StatItem({
 }) {
   const { ref, val } = useCounter(to);
   return (
-    // 🎨 EDIT: bg-bg-card border-border-default
     <div
       ref={ref}
       style={{
@@ -58,7 +57,6 @@ function StatItem({
         border: '1px solid #2D2D2D',
       }}
     >
-      {/* 🎨 EDIT: text-text-primary */}
       <div
         style={{
           fontSize: 36,
@@ -70,11 +68,10 @@ function StatItem({
         {to % 1 !== 0 ? to.toFixed(1) : val.toLocaleString()}
         {suffix}
       </div>
-      {/* 🎨 EDIT: text-text-muted */}
       <div
         style={{
           fontSize: 12,
-          color: '#737373',
+          color: '#B3B3B3',
           fontWeight: 500,
           letterSpacing: '0.04em',
         }}
@@ -86,27 +83,44 @@ function StatItem({
 }
 
 export default function SocialProof() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   return (
-    // 🎨 EDIT: bg-bg-app
     <section style={{ background: '#0A0A0A', padding: '96px 24px' }}>
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
         {/* Stats */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3,1fr)',
+            // ✅ 1 column on mobile, 3 columns on desktop
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
             gap: 14,
             marginBottom: 80,
           }}
         >
-          <StatItem to={12000} suffix="+" label="Resumes Analyzed" />
-          <StatItem to={89} suffix="%" label="Interview Rate Lift" />
-          <StatItem to={4.9} suffix="/5" label="Average Rating" />
+          {[
+            { to: 1000, suffix: '+', label: 'Resumes Analyzed' },
+            { to: 89, suffix: '%', label: 'Interview Rate Lift' },
+            { to: 4.9, suffix: '/5', label: 'Average Rating' },
+          ].map((s) => (
+            <StatItem
+              key={s.label}
+              to={s.to}
+              suffix={s.suffix}
+              label={s.label}
+            />
+          ))}
         </div>
 
         <FadeIn>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            {/* 🎨 EDIT: text-brand */}
             <p
               style={{
                 fontSize: 11,
@@ -119,7 +133,6 @@ export default function SocialProof() {
             >
               Real Results
             </p>
-            {/* 🎨 EDIT: text-text-primary */}
             <h2
               style={{
                 fontSize: 'clamp(28px,4vw,40px)',
@@ -135,14 +148,13 @@ export default function SocialProof() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
             gap: 14,
           }}
         >
           {testimonials.map((t, i) => (
             <FadeIn key={t.name} delay={i * 65}>
               <div
-                // 🎨 EDIT: bg-bg-card border-border-default hover:border-border-hover
                 style={{
                   padding: 24,
                   borderRadius: 18,
@@ -161,7 +173,6 @@ export default function SocialProof() {
                   (e.currentTarget.style.borderColor = '#2D2D2D')
                 }
               >
-                {/* 🎨 EDIT: text-warning */}
                 <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}>
                   {[...Array(5)].map((_, j) => (
                     <span key={j} style={{ color: '#F59E0B' }}>
@@ -169,7 +180,6 @@ export default function SocialProof() {
                     </span>
                   ))}
                 </div>
-                {/* 🎨 EDIT: text-text-secondary */}
                 <p
                   style={{
                     fontSize: 14,
@@ -203,7 +213,6 @@ export default function SocialProof() {
                         justifyContent: 'center',
                       }}
                     >
-                      {/* 🎨 EDIT: text-brand-light */}
                       <span
                         style={{
                           fontSize: 12,
@@ -215,25 +224,22 @@ export default function SocialProof() {
                       </span>
                     </div>
                     <div>
-                      {/* 🎨 EDIT: text-text-primary */}
                       <p
                         style={{
                           fontSize: 14,
                           fontWeight: 600,
-                          color: '#F5F5F5',
+                          color: '#B3B3B3',
                           margin: 0,
                         }}
                       >
                         {t.name}
                       </p>
-                      {/* 🎨 EDIT: text-text-muted */}
-                      <p style={{ fontSize: 12, color: '#737373', margin: 0 }}>
+                      <p style={{ fontSize: 12, color: '#B3B3B3', margin: 0 }}>
                         {t.role}
                       </p>
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    {/* 🎨 EDIT: text-brand */}
                     <div
                       style={{
                         fontSize: 14,
@@ -244,8 +250,7 @@ export default function SocialProof() {
                     >
                       {t.score}
                     </div>
-                    {/* 🎨 EDIT: text-text-muted */}
-                    <div style={{ fontSize: 11, color: '#737373' }}>
+                    <div style={{ fontSize: 11, color: '#B3B3B3' }}>
                       match score
                     </div>
                   </div>
@@ -262,7 +267,7 @@ export default function SocialProof() {
               display: 'flex',
               flexWrap: 'wrap',
               justifyContent: 'center',
-              gap: 32,
+              gap: isMobile ? 16 : 32,
               marginTop: 40,
             }}
           >
@@ -281,11 +286,10 @@ export default function SocialProof() {
                   alignItems: 'center',
                   gap: 8,
                   fontSize: 13,
-                  color: '#737373',
+                  color: '#B3B3B3',
                 }}
               >
-                {/* 🎨 EDIT: text-brand */}
-                <span style={{ color: '#3B82F6' }}>{b.icon}</span>
+                <span style={{ color: '#B3B3B3' }}>{b.icon}</span>
                 {b.text}
               </div>
             ))}
