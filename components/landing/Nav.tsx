@@ -1,11 +1,12 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useScrolled } from '@/hooks/useScrolled';
+import { scrollTo } from '@/lib/scrollTo';
 
 export default function Nav() {
   const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -19,11 +20,6 @@ export default function Nav() {
     { label: 'How It Works', id: 'how-it-works' },
     { label: 'Pricing', id: 'pricing' },
   ];
-
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    setMenuOpen(false); // closes mobile menu if open
-  };
 
   return (
     <nav
@@ -51,7 +47,7 @@ export default function Nav() {
           justifyContent: 'space-between',
         }}
       >
-        {/* Logo */}
+        {/* Logo — always visible */}
         <div
           style={{
             display: 'flex',
@@ -60,7 +56,6 @@ export default function Nav() {
             cursor: 'pointer',
           }}
         >
-          {/* Modern C logo mark */}
           <div
             style={{
               width: 32,
@@ -87,7 +82,6 @@ export default function Nav() {
               C
             </span>
           </div>
-          {/* Wordmark */}
           <span
             style={{
               color: '#F5F5F5',
@@ -97,18 +91,20 @@ export default function Nav() {
               lineHeight: 1,
             }}
           >
-            Clarity
-            <span style={{ color: '#3B82F6' }}>AI</span>
+            Clarity<span style={{ color: '#3B82F6' }}>AI</span>
           </span>
         </div>
 
-        {/* Desktop links */}
-        {!isMobile && (
+        {/* Desktop links — only when we KNOW it's not mobile */}
+        {isMobile === false && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
             {navLinks.map((l) => (
               <span
                 key={l.label}
-                onClick={() => scrollTo(l.id)}
+                onClick={() => {
+                  scrollTo(l.id);
+                  setMenuOpen(false);
+                }}
                 style={{
                   fontSize: 14,
                   color: '#B3B3B3',
@@ -127,8 +123,8 @@ export default function Nav() {
 
         {/* Right side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          {/* Desktop CTA */}
-          {!isMobile && (
+          {/* Desktop CTA — only when we KNOW it's not mobile */}
+          {isMobile === false && (
             <button
               style={{
                 display: 'inline-flex',
@@ -151,8 +147,8 @@ export default function Nav() {
             </button>
           )}
 
-          {/* Hamburger — mobile only */}
-          {isMobile && (
+          {/* Hamburger — only when we KNOW it's mobile */}
+          {isMobile === true && (
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               style={{
@@ -208,8 +204,8 @@ export default function Nav() {
         </div>
       </div>
 
-      {/* Mobile dropdown */}
-      {isMobile && (
+      {/* Mobile dropdown — only when we KNOW it's mobile */}
+      {isMobile === true && (
         <div
           style={{
             overflow: 'hidden',
@@ -229,7 +225,10 @@ export default function Nav() {
             {navLinks.map((l) => (
               <span
                 key={l.label}
-                onClick={() => scrollTo(l.id)}
+                onClick={() => {
+                  scrollTo(l.id);
+                  setMenuOpen(false);
+                }}
                 style={{
                   fontSize: 15,
                   color: '#B3B3B3',

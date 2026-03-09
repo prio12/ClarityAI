@@ -1,7 +1,10 @@
+'use client';
+
 /* eslint-disable react/no-unescaped-entities */
 
 import { Ic } from '@/components/shared/Icons';
 import { ScoreRing } from '@/components/dashboard/ScoreRing';
+import { scrollTo } from '@/lib/scrollTo';
 
 export default function Hero() {
   return (
@@ -201,9 +204,8 @@ export default function Hero() {
           >
             Analyze Your Resume Free <Ic.Arrow />
           </a>
-          <a
-            href="#"
-            // 🎨 EDIT: border-border-default text-text-secondary
+          <span
+            onClick={() => scrollTo('how-it-works')}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -215,10 +217,11 @@ export default function Hero() {
               fontWeight: 600,
               fontSize: 15,
               textDecoration: 'none',
+              cursor: 'pointer',
             }}
           >
             See How It Works
-          </a>
+          </span>
         </div>
 
         {/* Hero Card */}
