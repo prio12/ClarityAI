@@ -5,7 +5,7 @@ import { scrollTo } from '@/lib/scrollTo';
 
 export default function Nav() {
   const scrolled = useScrolled();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
@@ -23,81 +23,28 @@ export default function Nav() {
 
   return (
     <nav
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        transition: 'all .3s',
-        background:
-          scrolled || menuOpen ? 'rgba(10,10,10,0.92)' : 'transparent',
-        backdropFilter: scrolled || menuOpen ? 'blur(14px)' : 'none',
-        borderBottom: scrolled || menuOpen ? '1px solid #1E1E1E' : 'none',
-      }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled || menuOpen
+          ? 'bg-[rgba(10,10,10,0.92)] backdrop-blur-[14px] border-b border-border-subtle'
+          : 'bg-transparent'
+      }`}
     >
-      <div
-        style={{
-          maxWidth: 1100,
-          margin: '0 auto',
-          padding: '0 24px',
-          height: 64,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        {/* Logo — always visible */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            cursor: 'pointer',
-          }}
-        >
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 9,
-              background: 'linear-gradient(135deg, #3B82F6, #1E40AF)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 12px rgba(59,130,246,0.4)',
-              flexShrink: 0,
-            }}
-          >
-            <span
-              style={{
-                color: '#fff',
-                fontSize: 16,
-                fontWeight: 900,
-                letterSpacing: '-0.05em',
-                fontFamily: 'Georgia, serif',
-                lineHeight: 1,
-              }}
-            >
+      <div className="max-w-275 mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center gap-2.5 cursor-pointer">
+          <div className="w-8 h-8 rounded-[9px] bg-linear-to-br from-brand to-brand-dark flex items-center justify-center shadow-[0_0_12px_rgba(59,130,246,0.4)] shrink-0">
+            <span className="text-white text-base font-black tracking-[-0.05em] font-serif leading-none">
               C
             </span>
           </div>
-          <span
-            style={{
-              color: '#F5F5F5',
-              fontWeight: 700,
-              fontSize: 17,
-              letterSpacing: '-0.03em',
-              lineHeight: 1,
-            }}
-          >
-            Clarity<span style={{ color: '#3B82F6' }}>AI</span>
+          <span className="text-text-primary font-bold text-[17px] tracking-[-0.03em] leading-none">
+            Clarity<span className="text-brand">AI</span>
           </span>
         </div>
 
-        {/* Desktop links — only when we KNOW it's not mobile */}
+        {/* Desktop links */}
         {isMobile === false && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
+          <div className="flex items-center gap-9">
             {navLinks.map((l) => (
               <span
                 key={l.label}
@@ -105,15 +52,7 @@ export default function Nav() {
                   scrollTo(l.id);
                   setMenuOpen(false);
                 }}
-                style={{
-                  fontSize: 14,
-                  color: '#B3B3B3',
-                  cursor: 'pointer',
-                  transition: 'color .2s',
-                  fontWeight: 500,
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F5F5')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#B3B3B3')}
+                className="text-sm text-text-secondary cursor-pointer transition-colors duration-200 font-medium hover:text-text-primary"
               >
                 {l.label}
               </span>
@@ -122,106 +61,43 @@ export default function Nav() {
         )}
 
         {/* Right side */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          {/* Desktop CTA — only when we KNOW it's not mobile */}
+        <div className="flex items-center gap-3">
+          {/* Desktop CTA */}
           {isMobile === false && (
-            <button
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '9px 20px',
-                borderRadius: 10,
-                background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-                color: '#fff',
-                fontSize: 14,
-                fontWeight: 600,
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 0 16px rgba(59,130,246,0.25)',
-                transition: 'opacity .2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-            >
+            <button className="inline-flex items-center px-5 py-2.25 rounded-[10px] bg-linear-to-br from-brand to-brand-hover text-white text-sm font-semibold border-none cursor-pointer shadow-[0_0_16px_rgba(59,130,246,0.25)] transition-opacity duration-200 hover:opacity-85">
               Get Started Free
             </button>
           )}
 
-          {/* Hamburger — only when we KNOW it's mobile */}
+          {/* Hamburger */}
           {isMobile === true && (
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 5,
-              }}
+              className="bg-transparent border-none cursor-pointer p-2 flex flex-col gap-1.25"
               aria-label="Toggle menu"
             >
               <span
-                style={{
-                  display: 'block',
-                  width: 22,
-                  height: 2,
-                  background: '#F5F5F5',
-                  borderRadius: 2,
-                  transition: 'all .25s',
-                  transform: menuOpen
-                    ? 'translateY(7px) rotate(45deg)'
-                    : 'none',
-                }}
+                className={`block w-5.5 h-0.5 bg-text-primary rounded-sm transition-all duration-300 ${menuOpen ? 'translate-y-1.75 rotate-45' : ''}`}
               />
               <span
-                style={{
-                  display: 'block',
-                  width: 22,
-                  height: 2,
-                  background: '#F5F5F5',
-                  borderRadius: 2,
-                  transition: 'all .25s',
-                  opacity: menuOpen ? 0 : 1,
-                }}
+                className={`block w-5.5 h-0.5 bg-text-primary rounded-sm transition-all duration-300 ${menuOpen ? 'opacity-0' : 'opacity-100'}`}
               />
               <span
-                style={{
-                  display: 'block',
-                  width: 22,
-                  height: 2,
-                  background: '#F5F5F5',
-                  borderRadius: 2,
-                  transition: 'all .25s',
-                  transform: menuOpen
-                    ? 'translateY(-7px) rotate(-45deg)'
-                    : 'none',
-                }}
+                className={`block w-5.5 h-0.5 bg-text-primary rounded-sm transition-all duration-300 ${menuOpen ? '-translate-y-1.75 -rotate-45' : ''}`}
               />
             </button>
           )}
         </div>
       </div>
 
-      {/* Mobile dropdown — only when we KNOW it's mobile */}
+      {/* Mobile dropdown */}
       {isMobile === true && (
         <div
-          style={{
-            overflow: 'hidden',
-            maxHeight: menuOpen ? 320 : 0,
-            transition: 'max-height .3s ease',
-            borderTop: menuOpen ? '1px solid #1E1E1E' : 'none',
-          }}
+          className={`overflow-hidden transition-all duration-300 ease-in-out ${
+            menuOpen ? 'max-h-80 border-t border-border-subtle' : 'max-h-0'
+          }`}
         >
-          <div
-            style={{
-              padding: '12px 24px 24px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0,
-            }}
-          >
+          <div className="px-6 pt-3 pb-6 flex flex-col gap-0">
             {navLinks.map((l) => (
               <span
                 key={l.label}
@@ -229,36 +105,14 @@ export default function Nav() {
                   scrollTo(l.id);
                   setMenuOpen(false);
                 }}
-                style={{
-                  fontSize: 15,
-                  color: '#B3B3B3',
-                  cursor: 'pointer',
-                  padding: '14px 0',
-                  borderBottom: '1px solid #1E1E1E',
-                  transition: 'color .2s',
-                  fontWeight: 500,
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F5F5')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#B3B3B3')}
+                className="text-[15px] text-text-secondary cursor-pointer py-3.5 border-b border-border-subtle transition-colors duration-200 font-medium hover:text-text-primary"
               >
                 {l.label}
               </span>
             ))}
             <button
               onClick={() => setMenuOpen(false)}
-              style={{
-                marginTop: 16,
-                padding: '13px 24px',
-                borderRadius: 10,
-                background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-                color: '#fff',
-                fontSize: 15,
-                fontWeight: 600,
-                border: 'none',
-                cursor: 'pointer',
-                width: '100%',
-                boxShadow: '0 0 16px rgba(59,130,246,0.25)',
-              }}
+              className="mt-4 px-6 py-3.25 rounded-[10px] bg-linear-to-br from-brand to-brand-hover text-white text-[15px] font-semibold border-none cursor-pointer w-full shadow-[0_0_16px_rgba(59,130,246,0.25)]"
             >
               Get Started Free
             </button>

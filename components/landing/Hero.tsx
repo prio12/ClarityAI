@@ -5,408 +5,186 @@
 import { Ic } from '@/components/shared/Icons';
 import { ScoreRing } from '@/components/dashboard/ScoreRing';
 import { scrollTo } from '@/lib/scrollTo';
+import Link from 'next/link';
 
 export default function Hero() {
   return (
-    <section
-      style={{
-        // 🎨 EDIT: bg-bg-app
-        background: '#0A0A0A',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-        paddingTop: 64,
-      }}
-    >
-      {/* Orbs */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            top: '8%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 700,
-            height: 700,
-            borderRadius: '50%',
-            background:
-              'radial-gradient(circle, rgba(59,130,246,.10) 0%, rgba(59,130,246,.03) 45%, transparent 70%)',
-            filter: 'blur(4px)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: -80,
-            left: -120,
-            width: 420,
-            height: 420,
-            borderRadius: '50%',
-            background:
-              'radial-gradient(circle, rgba(59,130,246,.07) 0%, transparent 65%)',
-            filter: 'blur(50px)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: -60,
-            right: -80,
-            width: 360,
-            height: 360,
-            borderRadius: '50%',
-            background:
-              'radial-gradient(circle, rgba(96,165,250,.06) 0%, transparent 65%)',
-            filter: 'blur(50px)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 1,
-            background:
-              'linear-gradient(90deg, transparent 5%, rgba(59,130,246,.3) 50%, transparent 95%)',
-          }}
-        />
-      </div>
-
-      <div
-        style={{
-          position: 'relative',
-          maxWidth: 1000,
-          margin: '0 auto',
-          padding: '0 24px',
-          textAlign: 'center',
-        }}
-      >
-        {/* Badge */}
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '6px 14px',
-            borderRadius: 999,
-            border: '1px solid rgba(59,130,246,.25)',
-            background: 'rgba(59,130,246,.08)',
-            marginBottom: 32,
-            animation: 'hfd .55s ease both',
-          }}
-        >
-          {/* 🎨 EDIT: bg-brand */}
-          <span
+    <>
+      <section className="bg-bg-app min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        {/* Orbs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div
+            className="absolute top-[8%] left-1/2 -translate-x-1/2 w-175 h-175 rounded-full blur-xs"
             style={{
-              width: 6,
-              height: 6,
-              borderRadius: '50%',
-              background: '#3B82F6',
-              display: 'inline-block',
+              background:
+                'radial-gradient(circle, rgba(59,130,246,.10) 0%, rgba(59,130,246,.03) 45%, transparent 70%)',
             }}
           />
-          {/* 🎨 EDIT: text-brand-light */}
-          <span
-            style={{
-              fontSize: 12,
-              color: '#60A5FA',
-              fontWeight: 500,
-              letterSpacing: '0.05em',
-            }}
-          >
-            AI-Powered Resume Analysis
-          </span>
-        </div>
-
-        {/* Headline */}
-        {/* 🎨 EDIT: text-text-primary */}
-        <h1
-          style={{
-            fontSize: 'clamp(40px,7vw,72px)',
-            fontWeight: 900,
-            color: '#F5F5F5',
-            lineHeight: 1.05,
-            letterSpacing: '-0.03em',
-            marginBottom: 20,
-            animation: 'hfd .55s ease .08s both',
-          }}
-        >
-          Your resume is {/* 🎨 EDIT gradient: from-brand to-brand-light */}
-          <span
-            style={{
-              background: 'linear-gradient(135deg, #3B82F6 30%, #60A5FA 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            getting ignored.
-          </span>
-          <br />
-          Let's fix that.
-        </h1>
-
-        {/* Subheading */}
-        {/* 🎨 EDIT: text-text-secondary */}
-        <p
-          style={{
-            fontSize: 18,
-            color: '#B3B3B3',
-            maxWidth: 580,
-            margin: '0 auto 40px',
-            lineHeight: 1.7,
-            animation: 'hfd .55s ease .16s both',
-          }}
-        >
-          Upload your resume, paste the job description, and get an AI match
-          score with precise feedback — in under 30 seconds.
-        </p>
-
-        {/* CTAs */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 12,
-            marginBottom: 56,
-            flexWrap: 'wrap',
-            animation: 'hfd .55s ease .24s both',
-          }}
-        >
-          <a
-            href="#"
-            // 🎨 EDIT: bg-gradient-primary shadow-glow-blue
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 10,
-              padding: '14px 28px',
-              borderRadius: 12,
-              background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: 15,
-              textDecoration: 'none',
-              boxShadow:
-                '0 0 28px rgba(59,130,246,.30), 0 0 0 1px rgba(59,130,246,.25)',
-            }}
-          >
-            Analyze Your Resume Free <Ic.Arrow />
-          </a>
-          <span
-            onClick={() => scrollTo('how-it-works')}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '14px 28px',
-              borderRadius: 12,
-              border: '1px solid #2D2D2D',
-              color: '#B3B3B3',
-              fontWeight: 600,
-              fontSize: 15,
-              textDecoration: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            See How It Works
-          </span>
-        </div>
-
-        {/* Hero Card */}
-        <div style={{ animation: 'hfu .7s ease .32s both' }}>
           <div
+            className="absolute -top-20 -left-30 w-105 h-105 rounded-full blur-[50px]"
             style={{
-              maxWidth: 560,
-              margin: '0 auto',
-              borderRadius: 20,
-              overflow: 'hidden',
-              // 🎨 EDIT: bg-bg-card border-border-default shadow-elevated
-              background: '#141414',
-              border: '1px solid #2D2D2D',
-              boxShadow:
-                '0 0 0 1px rgba(59,130,246,.06), 0 32px 72px rgba(0,0,0,.6)',
+              background:
+                'radial-gradient(circle, rgba(59,130,246,.07) 0%, transparent 65%)',
+            }}
+          />
+          <div
+            className="absolute -bottom-15 -right-20 w-90 h-90 rounded-full blur-[50px]"
+            style={{
+              background:
+                'radial-gradient(circle, rgba(96,165,250,.06) 0%, transparent 65%)',
+            }}
+          />
+          <div
+            className="absolute top-0 left-0 right-0 h-px"
+            style={{
+              background:
+                'linear-gradient(90deg, transparent 5%, rgba(59,130,246,.3) 50%, transparent 95%)',
+            }}
+          />
+        </div>
+
+        <div className="relative max-w-250 mx-auto px-6 text-center">
+          {/* Badge */}
+          <div
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(59,130,246,.25)] bg-[rgba(59,130,246,.08)] mb-8"
+            style={{ animation: 'hfd .55s ease both' }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-brand inline-block" />
+            <span className="text-xs text-brand-light font-medium tracking-[0.05em]">
+              AI-Powered Resume Analysis
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h1
+            className="font-black text-text-primary leading-[1.05] tracking-[-0.03em] mb-5"
+            style={{
+              fontSize: 'clamp(40px,7vw,72px)',
+              animation: 'hfd .55s ease .08s both',
             }}
           >
-            {/* Browser chrome */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '10px 16px',
-                borderBottom: '1px solid #1E1E1E',
-                background: '#0F0F0F',
-              }}
-            >
-              {/* 🎨 EDIT: bg-danger bg-warning bg-success */}
-              <span
+            Your resume is{' '}
+            <span className="bg-linear-to-br from-brand to-brand-light bg-clip-text text-transparent">
+              getting ignored.
+            </span>
+            <br />
+            Let's fix that.
+          </h1>
+
+          {/* Subheading */}
+          <p
+            className="text-lg text-text-secondary max-w-145 mx-auto mb-10 leading-[1.7]"
+            style={{ animation: 'hfd .55s ease .16s both' }}
+          >
+            Upload your resume, paste the job description, and get an AI match
+            score with precise feedback — in under 30 seconds.
+          </p>
+
+          {/* CTAs */}
+          <div
+            className="flex items-center justify-center gap-3 mb-14 flex-wrap"
+            style={{ animation: 'hfd .55s ease .24s both' }}
+          >
+            <Link href="/signup">
+              <button
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-linear-to-br from-brand to-brand-hover text-white font-bold text-[15px] border-none cursor-pointer"
                 style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: '50%',
-                  background: '#EF4444',
-                  opacity: 0.6,
-                }}
-              />
-              <span
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: '50%',
-                  background: '#F59E0B',
-                  opacity: 0.6,
-                }}
-              />
-              <span
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: '50%',
-                  background: '#10B981',
-                  opacity: 0.6,
-                }}
-              />
-              {/* 🎨 EDIT: bg-bg-input text-text-muted */}
-              <div
-                style={{
-                  flex: 1,
-                  marginLeft: 12,
-                  height: 20,
-                  borderRadius: 6,
-                  background: '#1E1E1E',
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '0 10px',
+                  boxShadow:
+                    '0 0 28px rgba(59,130,246,.30), 0 0 0 1px rgba(59,130,246,.25)',
                 }}
               >
-                <span style={{ fontSize: 11, color: '#B3B3B3' }}>
-                  app.clarityai.com/analyze
-                </span>
-              </div>
-            </div>
-            {/* Card body */}
-            <div
-              style={{
-                padding: 24,
-                display: 'flex',
-                gap: 24,
-                alignItems: 'center',
-                flexWrap: 'wrap',
-              }}
+                Analyze Your Resume Free <Ic.Arrow />
+              </button>
+            </Link>
+            <span
+              onClick={() => scrollTo('how-it-works')}
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-border-default text-text-secondary font-semibold text-[15px] cursor-pointer"
             >
-              <ScoreRing score={87} />
-              <div style={{ flex: 1, minWidth: 200 }}>
-                {[
-                  { label: 'Keyword Match', pct: 91, color: '#3B82F6' }, // 🎨 EDIT: brand
-                  { label: 'Skills Alignment', pct: 78, color: '#60A5FA' }, // 🎨 EDIT: brand-light
-                  { label: 'Experience Fit', pct: 85, color: '#10B981' }, // 🎨 EDIT: success
-                ].map(({ label, pct, color }, i) => (
-                  <div key={label} style={{ marginBottom: 14 }}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginBottom: 6,
-                      }}
-                    >
-                      {/* 🎨 EDIT: text-text-muted */}
-                      <span style={{ fontSize: 11, color: '#B3B3B3' }}>
-                        {label}
-                      </span>
-                      {/* 🎨 EDIT: text-brand-light */}
-                      <span
-                        style={{
-                          fontSize: 11,
-                          color: '#60A5FA',
-                          fontFamily: 'monospace',
-                          fontWeight: 600,
-                        }}
-                      >
-                        {pct}%
-                      </span>
-                    </div>
-                    {/* 🎨 EDIT: bg-border-default */}
-                    <div
-                      style={{
-                        height: 5,
-                        borderRadius: 999,
-                        background: '#2D2D2D',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <div
-                        style={{
-                          height: '100%',
-                          borderRadius: 999,
-                          background: color,
-                          width: `${pct}%`,
-                          transition: `width 1.1s ease ${0.8 + i * 0.2}s`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: 6,
-                    marginTop: 8,
-                  }}
-                >
+              See How It Works
+            </span>
+          </div>
+
+          {/* Hero Card */}
+          <div style={{ animation: 'hfu .7s ease .32s both' }}>
+            <div className="max-w-140 mx-auto rounded-[20px] overflow-hidden bg-bg-card border border-border-default shadow-[0_0_0_1px_rgba(59,130,246,.06),0_32px_72px_rgba(0,0,0,.6)]">
+              {/* Browser chrome */}
+              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-border-subtle bg-[#0F0F0F]">
+                <span className="w-3 h-3 rounded-full bg-danger opacity-60" />
+                <span className="w-3 h-3 rounded-full bg-warning opacity-60" />
+                <span className="w-3 h-3 rounded-full bg-success opacity-60" />
+                <div className="flex-1 ml-3 h-5 rounded-[6px] bg-bg-input flex items-center px-2.5">
+                  <span className="text-[11px] text-text-secondary">
+                    app.clarityai.com/analyze
+                  </span>
+                </div>
+              </div>
+
+              {/* Card body */}
+              <div className="p-6 flex gap-6 items-center flex-wrap">
+                <ScoreRing score={87} />
+                <div className="flex-1 min-w-50">
                   {[
-                    "Add 'TypeScript'",
-                    'Quantify impact',
-                    'Remove objective',
-                  ].map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        fontSize: 11,
-                        padding: '4px 10px',
-                        borderRadius: 999,
-                        border: '1px solid rgba(59,130,246,.3)',
-                        background: 'rgba(59,130,246,.08)',
-                        color: '#60A5FA',
-                      }}
-                    >
-                      💡 {tag}
-                    </span>
+                    { label: 'Keyword Match', pct: 91, color: 'bg-brand' },
+                    {
+                      label: 'Skills Alignment',
+                      pct: 78,
+                      color: 'bg-brand-light',
+                    },
+                    { label: 'Experience Fit', pct: 85, color: 'bg-success' },
+                  ].map(({ label, pct, color }, i) => (
+                    <div key={label} className="mb-3.5">
+                      <div className="flex justify-between mb-1.5">
+                        <span className="text-[11px] text-text-secondary">
+                          {label}
+                        </span>
+                        <span className="text-[11px] text-brand-light font-semibold font-mono">
+                          {pct}%
+                        </span>
+                      </div>
+                      <div className="h-1.25 rounded-full bg-border-default overflow-hidden">
+                        <div
+                          className={`h-full rounded-full ${color}`}
+                          style={{
+                            width: `${pct}%`,
+                            transition: `width 1.1s ease ${0.8 + i * 0.2}s`,
+                          }}
+                        />
+                      </div>
+                    </div>
                   ))}
+
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {[
+                      "Add 'TypeScript'",
+                      'Quantify impact',
+                      'Remove objective',
+                    ].map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[11px] px-2.5 py-1 rounded-full border border-[rgba(59,130,246,.3)] bg-[rgba(59,130,246,.08)] text-brand-light"
+                      >
+                        💡 {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <p
+            className="mt-4 text-xs text-text-secondary"
+            style={{ animation: 'hfd .5s ease .5s both' }}
+          >
+            No credit card required · Free during beta
+          </p>
         </div>
-        {/* 🎨 EDIT: text-text-muted */}
-        <p
-          style={{
-            marginTop: 16,
-            fontSize: 12,
-            color: '#B3B3B3',
-            animation: 'hfd .5s ease .5s both',
-          }}
-        >
-          No credit card required · 5 free analyses/month
-        </p>
-      </div>
+      </section>
 
       <style>{`
         @keyframes hfd { from { opacity:0; transform:translateY(-14px); } to { opacity:1; transform:translateY(0); } }
         @keyframes hfu { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }
       `}</style>
-    </section>
+    </>
   );
 }

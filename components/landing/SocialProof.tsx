@@ -49,33 +49,13 @@ function StatItem({
   return (
     <div
       ref={ref}
-      style={{
-        textAlign: 'center',
-        padding: '32px 16px',
-        borderRadius: 18,
-        background: '#141414',
-        border: '1px solid #2D2D2D',
-      }}
+      className="text-center py-8 px-4 rounded-[18px] bg-bg-card border border-border-default"
     >
-      <div
-        style={{
-          fontSize: 36,
-          fontWeight: 900,
-          color: '#F5F5F5',
-          marginBottom: 4,
-        }}
-      >
+      <div className="text-[36px] font-black text-text-primary mb-1">
         {to % 1 !== 0 ? to.toFixed(1) : val.toLocaleString()}
         {suffix}
       </div>
-      <div
-        style={{
-          fontSize: 12,
-          color: '#B3B3B3',
-          fontWeight: 500,
-          letterSpacing: '0.04em',
-        }}
-      >
+      <div className="text-xs text-text-secondary font-medium tracking-[0.04em]">
         {label}
       </div>
     </div>
@@ -93,17 +73,12 @@ export default function SocialProof() {
   }, []);
 
   return (
-    <section style={{ background: '#0A0A0A', padding: '96px 24px' }}>
-      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+    <section className="bg-bg-app py-24 px-6">
+      <div className="max-w-250 mx-auto">
         {/* Stats */}
         <div
-          style={{
-            display: 'grid',
-            // ✅ 1 column on mobile, 3 columns on desktop
-            gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-            gap: 14,
-            marginBottom: 80,
-          }}
+          className="grid gap-3.5 mb-20"
+          style={{ gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)' }}
         >
           {[
             { to: 1000, suffix: '+', label: 'Resumes Analyzed' },
@@ -120,137 +95,71 @@ export default function SocialProof() {
         </div>
 
         <FadeIn>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <p
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#3B82F6',
-                marginBottom: 12,
-              }}
-            >
+          <div className="text-center mb-12">
+            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brand mb-3">
               Real Results
             </p>
             <h2
-              style={{
-                fontSize: 'clamp(28px,4vw,40px)',
-                fontWeight: 900,
-                color: '#F5F5F5',
-              }}
+              className="font-black text-text-primary"
+              style={{ fontSize: 'clamp(28px,4vw,40px)' }}
             >
               People getting hired with ClarityAI
             </h2>
           </div>
         </FadeIn>
 
+        {/* Testimonials */}
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-            gap: 14,
-          }}
+          className="grid gap-3.5"
+          style={{ gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)' }}
         >
           {testimonials.map((t, i) => (
             <FadeIn key={t.name} delay={i * 65}>
               <div
-                style={{
-                  padding: 24,
-                  borderRadius: 18,
-                  background: '#141414',
-                  border: '1px solid #2D2D2D',
-                  height: '100%',
-                  boxSizing: 'border-box',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'border-color .25s',
-                }}
+                className="p-6 rounded-[18px] bg-bg-card border border-border-default h-full box-border flex flex-col transition-colors duration-250"
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.borderColor = '#404040')
                 }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.borderColor = '#2D2D2D')
-                }
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = '')}
               >
-                <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}>
+                {/* Stars */}
+                <div className="flex gap-0.75 mb-4">
                   {[...Array(5)].map((_, j) => (
-                    <span key={j} style={{ color: '#F59E0B' }}>
+                    <span key={j} className="text-warning">
                       <Ic.Star />
                     </span>
                   ))}
                 </div>
-                <p
-                  style={{
-                    fontSize: 14,
-                    color: '#B3B3B3',
-                    lineHeight: 1.65,
-                    flex: 1,
-                    marginBottom: 20,
-                  }}
-                >
+
+                <p className="text-sm text-text-secondary leading-[1.65] flex-1 mb-5">
                   "{t.body}"
                 </p>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <div
-                    style={{ display: 'flex', alignItems: 'center', gap: 12 }}
-                  >
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {/* Avatar */}
                     <div
-                      style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                        background: 'rgba(59,130,246,.15)',
-                        border: '1px solid rgba(59,130,246,.3)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
+                      className="w-9 h-9 rounded-full flex items-center justify-center border border-[rgba(59,130,246,.3)]"
+                      style={{ background: 'rgba(59,130,246,.15)' }}
                     >
-                      <span
-                        style={{
-                          fontSize: 12,
-                          fontWeight: 700,
-                          color: '#60A5FA',
-                        }}
-                      >
+                      <span className="text-xs font-bold text-brand-light">
                         {t.avatar}
                       </span>
                     </div>
                     <div>
-                      <p
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 600,
-                          color: '#B3B3B3',
-                          margin: 0,
-                        }}
-                      >
+                      <p className="text-sm font-semibold text-text-secondary m-0">
                         {t.name}
                       </p>
-                      <p style={{ fontSize: 12, color: '#B3B3B3', margin: 0 }}>
+                      <p className="text-xs text-text-secondary m-0">
                         {t.role}
                       </p>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 700,
-                        color: '#3B82F6',
-                        fontFamily: 'monospace',
-                      }}
-                    >
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-brand font-mono">
                       {t.score}
                     </div>
-                    <div style={{ fontSize: 11, color: '#B3B3B3' }}>
+                    <div className="text-[11px] text-text-secondary">
                       match score
                     </div>
                   </div>
@@ -263,13 +172,8 @@ export default function SocialProof() {
         {/* Trust badges */}
         <FadeIn>
           <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: isMobile ? 16 : 32,
-              marginTop: 40,
-            }}
+            className="flex flex-wrap justify-center mt-10"
+            style={{ gap: isMobile ? 16 : 32 }}
           >
             {[
               {
@@ -281,15 +185,9 @@ export default function SocialProof() {
             ].map((b) => (
               <div
                 key={b.text}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  fontSize: 13,
-                  color: '#B3B3B3',
-                }}
+                className="flex items-center gap-2 text-[13px] text-text-secondary"
               >
-                <span style={{ color: '#B3B3B3' }}>{b.icon}</span>
+                <span className="text-text-secondary">{b.icon}</span>
                 {b.text}
               </div>
             ))}

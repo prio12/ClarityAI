@@ -25,35 +25,16 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    // 🎨 EDIT: bg-bg-app
-    <section
-      id="how-it-works"
-      style={{ background: '#0A0A0A', padding: '96px 24px' }}
-    >
-      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+    <section id="how-it-works" className="bg-bg-app py-24 px-6">
+      <div className="max-w-250 mx-auto">
         <FadeIn>
-          <div style={{ textAlign: 'center', marginBottom: 64 }}>
-            {/* 🎨 EDIT: text-brand */}
-            <p
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#3B82F6',
-                marginBottom: 12,
-              }}
-            >
+          <div className="text-center mb-16">
+            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brand mb-3">
               How It Works
             </p>
-            {/* 🎨 EDIT: text-text-primary */}
             <h2
-              style={{
-                fontSize: 'clamp(32px,5vw,48px)',
-                fontWeight: 900,
-                color: '#F5F5F5',
-                lineHeight: 1.1,
-              }}
+              className="font-black text-text-primary leading-[1.1]"
+              style={{ fontSize: 'clamp(32px,5vw,48px)' }}
             >
               Three steps.
               <br />
@@ -61,76 +42,34 @@ export default function HowItWorks() {
             </h2>
           </div>
         </FadeIn>
+
         <div
+          className="grid gap-8 relative"
           style={{
-            display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: 32,
-            position: 'relative',
           }}
         >
           {steps.map((s, i) => (
             <FadeIn key={s.title} delay={i * 100}>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                }}
-              >
+              <div className="flex flex-col items-center text-center">
+                {/* Icon box */}
                 <div
-                  style={{
-                    position: 'relative',
-                    width: 80,
-                    height: 80,
-                    borderRadius: 18,
-                    background: 'rgba(59,130,246,.08)',
-                    border: '1px solid rgba(59,130,246,.22)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 24,
-                  }}
+                  className="relative w-20 h-20 rounded-[18px] flex items-center justify-center mb-6 border border-[rgba(59,130,246,.22)]"
+                  style={{ background: 'rgba(59,130,246,.08)' }}
                 >
-                  {/* 🎨 EDIT: bg-gradient-primary */}
-                  <span
-                    style={{
-                      position: 'absolute',
-                      top: -10,
-                      right: -10,
-                      width: 22,
-                      height: 22,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-                      color: '#fff',
-                      fontSize: 11,
-                      fontWeight: 900,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
+                  {/* Step number badge */}
+                  <span className="absolute -top-2.5 -right-2.5 w-5.5 h-5.5 rounded-full bg-linear-to-br from-brand to-brand-hover text-white text-[11px] font-black flex items-center justify-center">
                     {s.n}
                   </span>
-                  {/* 🎨 EDIT: text-brand */}
-                  <span style={{ color: '#3B82F6' }}>
+                  <span className="text-brand">
                     <s.Icon />
                   </span>
                 </div>
-                {/* 🎨 EDIT: text-text-primary */}
-                <h3
-                  style={{
-                    fontSize: 17,
-                    fontWeight: 700,
-                    color: '#F5F5F5',
-                    marginBottom: 8,
-                  }}
-                >
+
+                <h3 className="text-[17px] font-bold text-text-primary mb-2">
                   {s.title}
                 </h3>
-                {/* 🎨 EDIT: text-text-muted */}
-                <p style={{ fontSize: 14, color: '#B3B3B3', lineHeight: 1.65 }}>
+                <p className="text-sm text-text-secondary leading-[1.65]">
                   {s.body}
                 </p>
               </div>

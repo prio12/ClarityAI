@@ -27,107 +27,59 @@ const problems = [
 
 export default function ProblemSection() {
   return (
-    // 🎨 EDIT: bg-bg-app
-    <section
-      style={{
-        background: '#0A0A0A',
-        padding: '96px 24px',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
+    <section className="bg-bg-app py-24 px-6 relative overflow-hidden">
+      {/* Orb */}
       <div
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-95 h-95 rounded-full pointer-events-none blur-[30px]"
         style={{
-          position: 'absolute',
-          right: 0,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: 380,
-          height: 380,
-          borderRadius: '50%',
           background:
             'radial-gradient(circle, rgba(59,130,246,.05) 0%, transparent 70%)',
-          filter: 'blur(30px)',
-          pointerEvents: 'none',
         }}
       />
-      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+
+      <div className="max-w-250 mx-auto">
         <FadeIn>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            {/* 🎨 EDIT: text-brand */}
-            <p
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#3B82F6',
-                marginBottom: 12,
-              }}
-            >
+          <div className="text-center mb-14">
+            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brand mb-3">
               The Problem
             </p>
-            {/* 🎨 EDIT: text-text-primary */}
             <h2
-              style={{
-                fontSize: 'clamp(32px,5vw,48px)',
-                fontWeight: 900,
-                color: '#F5F5F5',
-                lineHeight: 1.1,
-              }}
+              className="font-black text-text-primary leading-[1.1]"
+              style={{ fontSize: 'clamp(32px,5vw,48px)' }}
             >
               Job searching shouldn't feel
               <br />
-              {/* 🎨 EDIT: text-text-muted */}
-              <span style={{ color: '#737373' }}>
+              <span className="text-text-muted">
                 like shouting into the dark.
               </span>
             </h2>
           </div>
         </FadeIn>
+
         <div
+          className="grid gap-4"
           style={{
-            display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 16,
           }}
         >
           {problems.map((p, i) => (
             <FadeIn key={p.title} delay={i * 75}>
               <div
-                // 🎨 EDIT: bg-bg-card border-border-default hover:border-brand/30
-                style={{
-                  padding: 24,
-                  borderRadius: 18,
-                  background: '#141414',
-                  border: '1px solid #2D2D2D',
-                  height: '100%',
-                  boxSizing: 'border-box',
-                  transition: 'border-color .25s, transform .25s',
-                }}
+                className="p-6 rounded-[18px] bg-bg-card border border-border-default h-full box-border transition-all duration-250"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = 'rgba(59,130,246,.3)';
                   e.currentTarget.style.transform = 'translateY(-2px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#2D2D2D';
-                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.borderColor = '';
+                  e.currentTarget.style.transform = '';
                 }}
               >
-                <div style={{ fontSize: 32, marginBottom: 16 }}>{p.emoji}</div>
-                {/* 🎨 EDIT: text-text-primary */}
-                <h3
-                  style={{
-                    fontSize: 17,
-                    fontWeight: 700,
-                    color: '#F5F5F5',
-                    marginBottom: 8,
-                  }}
-                >
+                <div className="text-[32px] mb-4">{p.emoji}</div>
+                <h3 className="text-[17px] font-bold text-text-primary mb-2">
                   {p.title}
                 </h3>
-                {/* 🎨 EDIT: text-text-muted */}
-                <p style={{ fontSize: 14, color: '#B3B3B3', lineHeight: 1.65 }}>
+                <p className="text-sm text-text-secondary leading-[1.65]">
                   {p.body}
                 </p>
               </div>

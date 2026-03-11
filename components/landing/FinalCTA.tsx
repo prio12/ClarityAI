@@ -5,103 +5,49 @@ import { Ic } from '@/components/shared/Icons';
 
 export default function FinalCTA() {
   return (
-    // 🎨 EDIT: bg-bg-app
-    <section style={{ background: '#0A0A0A', padding: '96px 24px' }}>
+    <section className="bg-bg-app py-24 px-6">
       <FadeIn>
-        <div
-          style={{
-            maxWidth: 680,
-            margin: '0 auto',
-            textAlign: 'center',
-            position: 'relative',
-            padding: '64px 48px',
-            borderRadius: 28,
-            overflow: 'hidden',
-            // 🎨 EDIT: bg-bg-card border-brand/20
-            background: '#141414',
-            border: '1px solid rgba(59,130,246,.2)',
-            boxShadow: '0 0 60px rgba(59,130,246,.07)',
-          }}
-        >
+        <div className="max-w-170 mx-auto text-center relative px-12 py-16 rounded-[28px] overflow-hidden bg-bg-card border border-[rgba(59,130,246,.2)] shadow-[0_0_60px_rgba(59,130,246,.07)]">
+          {/* Orb */}
           <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-70 rounded-full pointer-events-none blur-[20px]"
             style={{
-              position: 'absolute',
-              top: 0,
-              left: '50%',
-              transform: 'translateX(-50%) translateY(-50%)',
-              width: 500,
-              height: 280,
-              borderRadius: '50%',
               background:
                 'radial-gradient(ellipse, rgba(59,130,246,.13) 0%, transparent 70%)',
-              filter: 'blur(20px)',
-              pointerEvents: 'none',
             }}
           />
-          <div style={{ position: 'relative' }}>
-            {/* 🎨 EDIT: text-brand */}
-            <p
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#3B82F6',
-                marginBottom: 16,
-              }}
-            >
+
+          <div className="relative">
+            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brand mb-4">
               Get Started Today
             </p>
-            {/* 🎨 EDIT: text-text-primary */}
+
             <h2
-              style={{
-                fontSize: 'clamp(32px,5vw,48px)',
-                fontWeight: 900,
-                color: '#F5F5F5',
-                lineHeight: 1.1,
-                marginBottom: 16,
-              }}
+              className="font-black text-text-primary leading-[1.1] mb-4"
+              style={{ fontSize: 'clamp(32px,5vw,48px)' }}
             >
               Stop sending
               <br />
               blind applications.
             </h2>
-            {/* 🎨 EDIT: text-text-secondary */}
-            <p
-              style={{
-                fontSize: 17,
-                color: '#B3B3B3',
-                lineHeight: 1.7,
-                maxWidth: 460,
-                margin: '0 auto 32px',
-              }}
-            >
+
+            <p className="text-[17px] text-text-secondary leading-[1.7] max-w-115 mx-auto mb-8">
               You've put in the work. Make sure your resume shows it. First
               analysis is free — no credit card, no commitment.
             </p>
-            <a
-              href="#"
-              // 🎨 EDIT: bg-gradient-primary shadow-glow-blue
+
+            <button
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-[14px] bg-linear-to-br from-brand to-brand-hover text-white font-bold text-base border-none cursor-pointer"
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '16px 32px',
-                borderRadius: 14,
-                background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 16,
-                textDecoration: 'none',
                 boxShadow:
                   '0 0 32px rgba(59,130,246,.32), 0 0 0 1px rgba(59,130,246,.25)',
               }}
             >
               Analyze Your Resume Free <Ic.Arrow />
-            </a>
-            {/* 🎨 EDIT: text-text-muted */}
-            <p style={{ marginTop: 16, fontSize: 13, color: '#B3B3B3' }}>
-              No credit card required · 5 free analyses/month
+            </button>
+
+            <p className="mt-4 text-[13px] text-text-secondary">
+              No credit card required · Free during beta
             </p>
           </div>
         </div>

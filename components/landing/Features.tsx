@@ -37,54 +37,28 @@ const features = [
 
 export default function Features() {
   return (
-    // 🎨 EDIT: bg-bg-app
     <section
       id="features"
-      style={{
-        background: '#0A0A0A',
-        padding: '96px 24px',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
+      className="bg-bg-app py-24 px-6 relative overflow-hidden"
     >
+      {/* Orb */}
       <div
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-175 h-87.5 pointer-events-none blur-[20px]"
         style={{
-          position: 'absolute',
-          bottom: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 700,
-          height: 350,
           background:
             'radial-gradient(ellipse at bottom, rgba(59,130,246,.07) 0%, transparent 70%)',
-          filter: 'blur(20px)',
-          pointerEvents: 'none',
         }}
       />
-      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+
+      <div className="max-w-250 mx-auto">
         <FadeIn>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            {/* 🎨 EDIT: text-brand */}
-            <p
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#3B82F6',
-                marginBottom: 12,
-              }}
-            >
+          <div className="text-center mb-14">
+            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brand mb-3">
               Features
             </p>
-            {/* 🎨 EDIT: text-text-primary */}
             <h2
-              style={{
-                fontSize: 'clamp(32px,5vw,48px)',
-                fontWeight: 900,
-                color: '#F5F5F5',
-                lineHeight: 1.1,
-              }}
+              className="font-black text-text-primary leading-[1.1]"
+              style={{ fontSize: 'clamp(32px,5vw,48px)' }}
             >
               Everything you need
               <br />
@@ -92,27 +66,17 @@ export default function Features() {
             </h2>
           </div>
         </FadeIn>
+
         <div
+          className="grid gap-3.5"
           style={{
-            display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 14,
           }}
         >
           {features.map((f, i) => (
             <FadeIn key={f.title} delay={i * 55}>
               <div
-                // 🎨 EDIT: bg-bg-card border-border-default
-                style={{
-                  padding: 24,
-                  borderRadius: 18,
-                  background: '#141414',
-                  border: '1px solid #2D2D2D',
-                  height: '100%',
-                  boxSizing: 'border-box',
-                  transition:
-                    'border-color .25s, transform .25s, box-shadow .25s',
-                }}
+                className="p-6 rounded-[18px] bg-bg-card border border-border-default h-full box-border transition-all duration-250"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = 'rgba(59,130,246,.28)';
                   e.currentTarget.style.transform = 'translateY(-3px)';
@@ -120,41 +84,23 @@ export default function Features() {
                     '0 0 24px rgba(59,130,246,.08)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#2D2D2D';
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = '';
+                  e.currentTarget.style.transform = '';
+                  e.currentTarget.style.boxShadow = '';
                 }}
               >
-                {/* 🎨 EDIT: bg-brand/10 border-brand/20 text-brand */}
+                {/* Icon box */}
                 <div
-                  style={{
-                    width: 42,
-                    height: 42,
-                    borderRadius: 12,
-                    background: 'rgba(59,130,246,.10)',
-                    border: '1px solid rgba(59,130,246,.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 16,
-                    color: '#3B82F6',
-                  }}
+                  className="w-10.5 h-10.5 rounded-xl flex items-center justify-center mb-4 text-brand border border-[rgba(59,130,246,.2)]"
+                  style={{ background: 'rgba(59,130,246,.10)' }}
                 >
                   <f.Icon />
                 </div>
-                {/* 🎨 EDIT: text-text-primary */}
-                <h3
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 700,
-                    color: '#F5F5F5',
-                    marginBottom: 6,
-                  }}
-                >
+
+                <h3 className="text-[15px] font-bold text-text-primary mb-1.5">
                   {f.title}
                 </h3>
-                {/* 🎨 EDIT: text-text-muted */}
-                <p style={{ fontSize: 13, color: '#B3B3B3', lineHeight: 1.65 }}>
+                <p className="text-[13px] text-text-secondary leading-[1.65]">
                   {f.desc}
                 </p>
               </div>

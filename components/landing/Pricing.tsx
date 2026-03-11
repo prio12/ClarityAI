@@ -25,7 +25,7 @@ function CheckIcon() {
       fill="none"
       stroke="currentColor"
       strokeWidth={2.5}
-      style={{ width: 12, height: 12 }}
+      className="w-3 h-3"
     >
       <path
         strokeLinecap="round"
@@ -40,58 +40,31 @@ export default function Pricing() {
   return (
     <section
       id="pricing"
-      style={{
-        background: '#0A0A0A',
-        padding: '96px 24px',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
+      className="bg-bg-app py-24 px-6 relative overflow-hidden"
     >
       {/* Bg orb */}
       <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-125 rounded-full pointer-events-none blur-[20px]"
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%,-50%)',
-          width: 600,
-          height: 500,
-          borderRadius: '50%',
           background:
             'radial-gradient(ellipse, rgba(59,130,246,.06) 0%, transparent 70%)',
-          filter: 'blur(20px)',
-          pointerEvents: 'none',
         }}
       />
 
-      <div style={{ maxWidth: 700, margin: '0 auto', position: 'relative' }}>
+      <div className="max-w-175 mx-auto relative">
         {/* Header */}
         <FadeIn>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <p
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#3B82F6',
-                marginBottom: 12,
-              }}
-            >
+          <div className="text-center mb-12">
+            <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brand mb-3">
               Pricing
             </p>
             <h2
-              style={{
-                fontSize: 'clamp(32px,5vw,48px)',
-                fontWeight: 900,
-                color: '#F5F5F5',
-                marginBottom: 12,
-                lineHeight: 1.1,
-              }}
+              className="font-black text-text-primary mb-3 leading-[1.1]"
+              style={{ fontSize: 'clamp(32px,5vw,48px)' }}
             >
               Simple, honest pricing.
             </h2>
-            <p style={{ fontSize: 16, color: '#B3B3B3' }}>
+            <p className="text-base text-text-secondary">
               Start free. No credit card required.
             </p>
           </div>
@@ -99,117 +72,40 @@ export default function Pricing() {
 
         {/* Cards */}
         <div
+          className="grid gap-5"
           style={{
-            display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 20,
           }}
         >
           {/* FREE CARD */}
           <FadeIn delay={0}>
-            <div
-              style={{
-                padding: 32,
-                borderRadius: 20,
-                background: '#141414',
-                border: '1px solid rgba(59,130,246,.4)',
-                boxShadow: '0 0 40px rgba(59,130,246,.08)',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                boxSizing: 'border-box',
-                position: 'relative',
-              }}
-            >
+            <div className="p-8 rounded-[20px] bg-bg-card flex flex-col h-full box-border relative border border-[rgba(59,130,246,.4)] shadow-[0_0_40px_rgba(59,130,246,.08)]">
               {/* Badge */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: -14,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  padding: '4px 16px',
-                  borderRadius: 999,
-                  background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-                  color: '#fff',
-                  fontSize: 11,
-                  fontWeight: 700,
-                  whiteSpace: 'nowrap',
-                }}
-              >
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-linear-to-br from-brand to-brand-hover text-white text-[11px] font-bold whitespace-nowrap">
                 Free During Beta
               </div>
 
-              <h3
-                style={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  color: '#F5F5F5',
-                  marginBottom: 4,
-                }}
-              >
-                Free
-              </h3>
-              <p style={{ fontSize: 13, color: '#B3B3B3', marginBottom: 20 }}>
+              <h3 className="text-xl font-bold text-text-primary mb-1">Free</h3>
+              <p className="text-[13px] text-text-secondary mb-5">
                 Everything free while we're in beta.
               </p>
 
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  gap: 4,
-                  marginBottom: 24,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 48,
-                    fontWeight: 900,
-                    color: '#F5F5F5',
-                    lineHeight: 1,
-                  }}
-                >
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="text-[48px] font-black text-text-primary leading-none">
                   $0
                 </span>
-                <span style={{ fontSize: 13, color: '#B3B3B3' }}>/month</span>
+                <span className="text-[13px] text-text-secondary">/month</span>
               </div>
 
-              <ul
-                style={{
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: '0 0 32px',
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 10,
-                }}
-              >
+              <ul className="list-none p-0 m-0 mb-8 flex-1 flex flex-col gap-2.5">
                 {freePerks.map((p) => (
                   <li
                     key={p}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 12,
-                      fontSize: 14,
-                      color: '#B3B3B3',
-                    }}
+                    className="flex items-center gap-3 text-sm text-text-secondary"
                   >
                     <span
-                      style={{
-                        width: 18,
-                        height: 18,
-                        borderRadius: '50%',
-                        background: 'rgba(59,130,246,.15)',
-                        border: '1px solid rgba(59,130,246,.3)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        color: '#3B82F6',
-                      }}
+                      className="w-4.5 h-4.5 rounded-full flex items-center justify-center shrink-0 text-brand border border-[rgba(59,130,246,.3)]"
+                      style={{ background: 'rgba(59,130,246,.15)' }}
                     >
                       <CheckIcon />
                     </span>
@@ -218,25 +114,7 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              <button
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'center',
-                  padding: '12px 24px',
-                  borderRadius: 12,
-                  fontWeight: 700,
-                  fontSize: 14,
-                  border: 'none',
-                  cursor: 'pointer',
-                  background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-                  color: '#fff',
-                  boxShadow: '0 0 20px rgba(59,130,246,.25)',
-                  transition: 'opacity .2s',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-              >
+              <button className="block w-full text-center px-6 py-3 rounded-xl font-bold text-sm border-none cursor-pointer bg-linear-to-br from-brand to-brand-hover text-white transition-opacity duration-200 shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85">
                 Get Started Free
               </button>
             </div>
@@ -244,111 +122,33 @@ export default function Pricing() {
 
           {/* PRO CARD — coming soon */}
           <FadeIn delay={100}>
-            <div
-              style={{
-                padding: 32,
-                borderRadius: 20,
-                background: '#141414',
-                border: '1px solid #2D2D2D',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                boxSizing: 'border-box',
-                position: 'relative',
-                opacity: 0.6,
-              }}
-            >
+            <div className="p-8 rounded-[20px] bg-bg-card border border-border-default flex flex-col h-full box-border relative opacity-60">
               {/* Badge */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: -14,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  padding: '4px 16px',
-                  borderRadius: 999,
-                  background: '#1A1A1A',
-                  border: '1px solid #2D2D2D',
-                  color: '#B3B3B3',
-                  fontSize: 11,
-                  fontWeight: 700,
-                  whiteSpace: 'nowrap',
-                }}
-              >
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-bg-elevated border border-border-default text-text-secondary text-[11px] font-bold whitespace-nowrap">
                 Coming Soon
               </div>
 
-              <h3
-                style={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  color: '#B3B3B3',
-                  marginBottom: 4,
-                }}
-              >
+              <h3 className="text-xl font-bold text-text-secondary mb-1">
                 Pro
               </h3>
-              <p style={{ fontSize: 13, color: '#B3B3B3', marginBottom: 20 }}>
+              <p className="text-[13px] text-text-secondary mb-5">
                 For serious job seekers who want every edge.
               </p>
 
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  gap: 4,
-                  marginBottom: 24,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 48,
-                    fontWeight: 900,
-                    color: '#737373',
-                    lineHeight: 1,
-                  }}
-                >
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="text-[48px] font-black text-text-muted leading-none">
                   $4.99
                 </span>
-                <span style={{ fontSize: 13, color: '#B3B3B3' }}>/month</span>
+                <span className="text-[13px] text-text-secondary">/month</span>
               </div>
 
-              <ul
-                style={{
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: '0 0 32px',
-                  flex: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 10,
-                }}
-              >
+              <ul className="list-none p-0 m-0 mb-8 flex-1 flex flex-col gap-2.5">
                 {proPerks.map((p) => (
                   <li
                     key={p}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 12,
-                      fontSize: 14,
-                      color: '#B3B3B3',
-                    }}
+                    className="flex items-center gap-3 text-sm text-text-secondary"
                   >
-                    <span
-                      style={{
-                        width: 18,
-                        height: 18,
-                        borderRadius: '50%',
-                        background: '#1A1A1A',
-                        border: '1px solid #2D2D2D',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        color: '#B3B3B3',
-                      }}
-                    >
+                    <span className="w-4.5 h-4.5 rounded-full bg-bg-elevated border border-border-default flex items-center justify-center shrink-0 text-text-secondary">
                       <CheckIcon />
                     </span>
                     {p}
@@ -358,19 +158,7 @@ export default function Pricing() {
 
               <button
                 disabled
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'center',
-                  padding: '12px 24px',
-                  borderRadius: 12,
-                  fontWeight: 700,
-                  fontSize: 14,
-                  border: '1px solid #2D2D2D',
-                  background: 'transparent',
-                  color: '#B3B3B3',
-                  cursor: 'not-allowed',
-                }}
+                className="block w-full text-center px-6 py-3 rounded-xl font-bold text-sm border border-border-default bg-transparent text-border-hover cursor-not-allowed"
               >
                 Coming Soon
               </button>
@@ -380,14 +168,7 @@ export default function Pricing() {
 
         {/* Bottom note */}
         <FadeIn>
-          <p
-            style={{
-              textAlign: 'center',
-              fontSize: 12,
-              color: '#B3B3B3',
-              marginTop: 24,
-            }}
-          >
+          <p className="text-center text-xs text-text-secondary mt-6">
             Free during beta · Pro plan with advanced features coming soon
           </p>
         </FadeIn>

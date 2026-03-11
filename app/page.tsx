@@ -10,7 +10,7 @@ import SocialProof from '@/components/landing/SocialProof';
 
 export default function Home() {
   return (
-    <main className="bg-bg-app">
+    <main>
       <Nav />
       <Hero />
       <ProblemSection />
