@@ -2,6 +2,9 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import LoadingButton from '@/components/shared/LoadingButton';
 
 interface LoginForm {
   email: string;
@@ -12,6 +15,7 @@ export default function LoginPage() {
   const [form, setForm] = useState<LoginForm>({ email: '', password: '' });
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleSubmit = async (): Promise<void> => {
     setError('');
@@ -21,9 +25,23 @@ export default function LoginPage() {
     }
     setLoading(true);
 
-    console.log(form, 'from login page');
-    // 🔌 TODO: wire up Supabase auth here
-    setLoading(false);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+
+      router.push('/dashboard');
+    } catch {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -118,7 +136,14 @@ export default function LoginPage() {
 
           {/* OAuth */}
           <div className="flex flex-col gap-2.5 mb-6">
-            <button className="w-full px-4 py-2.75 rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium cursor-pointer flex items-center justify-center gap-2.5 transition-colors duration-200 hover:border-border-hover">
+            <button
+              disabled={loading}
+              className={`w-full px-4 py-2.75 rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium flex items-center justify-center gap-2.5 transition-all duration-200 ${
+                loading
+                  ? 'opacity-40 cursor-not-allowed'
+                  : 'cursor-pointer hover:border-border-hover'
+              }`}
+            >
               <svg viewBox="0 0 24 24" className="w-4.5 h-4.5">
                 <path
                   fill="#4285F4"
@@ -140,7 +165,14 @@ export default function LoginPage() {
               Continue with Google
             </button>
 
-            <button className="w-full px-4 py-2.75 rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium cursor-pointer flex items-center justify-center gap-2.5 transition-colors duration-200 hover:border-border-hover">
+            <button
+              disabled={loading}
+              className={`w-full px-4 py-[11px] rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium flex items-center justify-center gap-2.5 transition-all duration-200 ${
+                loading
+                  ? 'opacity-40 cursor-not-allowed'
+                  : 'cursor-pointer hover:border-border-hover'
+              }`}
+            >
               <svg
                 viewBox="0 0 24 24"
                 fill="currentColor"
@@ -180,7 +212,10 @@ export default function LoginPage() {
                 placeholder="you@example.com"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-[10px] bg-bg-input border border-border-default text-text-primary text-sm outline-none box-border transition-colors duration-200 focus:border-border-focus"
+                disabled={loading}
+                className={`w-full px-3.5 py-2.5 rounded-[10px] bg-bg-input border border-border-default text-text-primary text-sm outline-none box-border transition-colors duration-200 focus:border-border-focus ${
+                  loading ? 'opacity-40 cursor-not-allowed' : ''
+                }`}
               />
             </div>
 
@@ -198,21 +233,20 @@ export default function LoginPage() {
                 placeholder="Your password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-[10px] bg-bg-input border border-border-default text-text-primary text-sm outline-none box-border transition-colors duration-200 focus:border-border-focus"
+                disabled={loading}
+                className={`w-full px-3.5 py-2.5 rounded-[10px] bg-bg-input border border-border-default text-text-primary text-sm outline-none box-border transition-colors duration-200 focus:border-border-focus ${
+                  loading ? 'opacity-40 cursor-not-allowed' : ''
+                }`}
               />
             </div>
 
-            <button
+            <LoadingButton
+              loading={loading}
               onClick={handleSubmit}
-              disabled={loading}
-              className={`w-full px-6 py-3 rounded-[10px] text-[15px] font-bold border-none mt-1 transition-opacity duration-200 ${
-                loading
-                  ? 'bg-bg-input text-text-muted cursor-not-allowed'
-                  : 'bg-linear-to-br from-brand to-brand-hover text-white cursor-pointer shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85'
-              }`}
+              loadingText="Signing in..."
             >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>
+              Sign In
+            </LoadingButton>
           </div>
 
           <p className="text-center text-sm text-text-muted mt-6">
