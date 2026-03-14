@@ -58,6 +58,8 @@ export const config = {
     '/analyze/:path*',
     '/results/:path*',
     '/history/:path*',
+    '/tracker/:path*',
+    '/settings/:path*',
     '/login',
     '/signup',
   ],
