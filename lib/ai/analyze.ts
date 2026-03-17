@@ -48,8 +48,6 @@ Return ONLY a valid JSON object with exactly this structure, no markdown, no exp
 
   const text = response.text ?? '';
 
-  console.log(text, 'before cleaning - uncleaned');
-
   // clean the response — remove markdown code blocks if present
   const cleaned = text
     .replace(/```json/g, '')
