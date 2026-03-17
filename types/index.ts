@@ -31,3 +31,24 @@ export interface Analysis extends AnalysisResult {
   resume_text: string;
   user_id: string;
 }
+
+export interface Profile {
+  id: string;
+  name: string | null;
+  created_at: string;
+}
+
+export type JobStatus = 'Applied' | 'Interview' | 'Offer' | 'Rejected';
+
+export interface JobApplication {
+  id: string;
+  user_id: string;
+  company_name: string;
+  job_title: string;
+  company_url: string | null;
+  job_url: string | null;
+  status: JobStatus;
+  applied_date: string;
+  notes: string | null;
+  created_at: string;
+}
