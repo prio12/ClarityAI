@@ -39,26 +39,27 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
   const email = user?.email ?? '';
 
-  // 🔌 TODO: fetch analyses once table is created
-  // const { data: analyses } = await supabase
-  //   .from('analyses')
-  //   .select('id, job_title, company, score, created_at')
-  //   .eq('user_id', user?.id)
-  //   .order('created_at', { ascending: false })
-  //   .limit(3);
+  const { data: analyses } = await supabase
+    .from('analyses')
+    .select('id, company_name, score, created_at')
+    .eq('user_id', user?.id ?? '')
+    .order('created_at', { ascending: false })
+    .limit(3);
 
-  const analyses: Analysis[] = []; // remove this once DB is ready
-  const hasAnalyses = analyses.length > 0;
+  const hasAnalyses = analyses && analyses.length > 0;
 
   const stats = {
-    total: analyses.length,
+    total: analyses?.length ?? 0,
     average:
-      analyses.length > 0
+      analyses && analyses.length > 0
         ? Math.round(
             analyses.reduce((a, b) => a + b.score, 0) / analyses.length
           )
         : 0,
-    best: analyses.length > 0 ? Math.max(...analyses.map((a) => a.score)) : 0,
+    best:
+      analyses && analyses.length > 0
+        ? Math.max(...analyses.map((a) => a.score))
+        : 0,
   };
 
   return (
@@ -169,13 +170,9 @@ export default async function DashboardPage() {
               >
                 <div className="flex flex-col gap-0.5">
                   <span className="text-sm font-semibold text-text-primary">
-                    {analysis.job_title}
-                    {analysis.company && (
-                      <span className="text-text-muted font-normal">
-                        {' '}
-                        @ {analysis.company}
-                      </span>
-                    )}
+                    {analysis.company_name
+                      ? `@ ${analysis.company_name}`
+                      : 'Analysis'}
                   </span>
                   <span className="text-xs text-text-muted">
                     {timeAgo(analysis.created_at)}
