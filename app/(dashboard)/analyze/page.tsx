@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -17,6 +17,32 @@ export default function AnalyzePage() {
   const [fileName, setFileName] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [lastResume, setLastResume] = useState<string>('');
+
+  //to let the user use previous resume
+  useEffect(() => {
+    const fetchLastResume = async (): Promise<void> => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data } = await supabase
+        .from('analyses')
+        .select('resume_text')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (data?.resume_text) {
+        setLastResume(data.resume_text);
+      }
+    };
+
+    fetchLastResume();
+  }, []);
 
   const extractTextFromPDF = async (file: File): Promise<string> => {
     const pdfjsLib = await import('pdfjs-dist');
@@ -187,9 +213,22 @@ export default function AnalyzePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Resume input */}
         <div className="flex flex-col gap-3">
-          <Label className="text-text-primary font-semibold text-[15px]">
-            Your Resume
-          </Label>
+          <div className="flex items-center justify-between">
+            <Label className="text-text-primary font-semibold text-[15px]">
+              Your Resume
+            </Label>
+            {lastResume && (
+              <button
+                onClick={() => {
+                  setResumeText(lastResume);
+                  setFileName('');
+                }}
+                className="text-xs text-brand font-medium cursor-pointer bg-transparent border-none hover:opacity-80 transition-opacity"
+              >
+                ↩ Use last resume
+              </button>
+            )}
+          </div>
 
           <Tabs defaultValue="paste" className="w-full">
             <TabsList className="bg-bg-elevated border border-border-default w-full mb-3">

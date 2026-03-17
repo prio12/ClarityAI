@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { getScoreBadgeVariant, getScoreColor } from '@/lib/utilities/score';
 
 interface Analysis {
   id: string;
@@ -10,21 +11,6 @@ interface Analysis {
   company: string;
   score: number;
   created_at: string;
-}
-
-function getScoreColor(score: number): string {
-  if (score >= 90) return 'text-success';
-  if (score >= 70) return 'text-brand';
-  if (score >= 50) return 'text-warning';
-  return 'text-danger';
-}
-
-function getScoreBadgeVariant(
-  score: number
-): 'default' | 'secondary' | 'destructive' | 'outline' {
-  if (score >= 70) return 'default';
-  if (score >= 50) return 'secondary';
-  return 'destructive';
 }
 
 function getGreeting(): string {

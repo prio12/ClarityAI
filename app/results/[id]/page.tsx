@@ -7,13 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import CopyButton from '@/components/shared/CopyButton';
 import { Analysis } from '@/types';
-
-function getScoreColor(score: number): string {
-  if (score >= 90) return 'text-success';
-  if (score >= 70) return 'text-brand';
-  if (score >= 50) return 'text-warning';
-  return 'text-danger';
-}
+import { getScoreColor } from '@/lib/utilities/score';
 
 function getScoreLabel(score: number): string {
   if (score >= 90) return 'Excellent Match';
@@ -82,7 +76,7 @@ export default async function ResultsPage({
           </div>
           <Button
             asChild
-            className="bg-gradient-to-br from-brand to-brand-hover text-white font-bold shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85 transition-opacity border-none w-fit"
+            className="bg-linear-to-br from-brand to-brand-hover text-white font-bold shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85 transition-opacity border-none w-fit"
           >
             <Link href="/analyze">+ New Analysis</Link>
           </Button>
@@ -139,7 +133,7 @@ export default async function ResultsPage({
                   {getScoreLabel(typedAnalysis.score)}
                 </h2>
                 <Badge
-                  className={`font-bold text-xs ${getScoreColor(typedAnalysis.score)}`}
+                  className={`font-bold text-xs  ${getScoreColor(typedAnalysis.score)}`}
                   variant={
                     typedAnalysis.score >= 70
                       ? 'default'
