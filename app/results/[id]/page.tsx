@@ -5,37 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Progress } from '@/components/ui/progress';
 import CopyButton from '@/components/shared/CopyButton';
-
-interface Requirements {
-  location: string | null;
-  visa: string | null;
-  experience: string | null;
-  certifications: string | null;
-}
-
-interface ATSKeywords {
-  matched: string[];
-  missing: string[];
-  match_rate: number;
-}
-
-interface Analysis {
-  id: string;
-  score: number;
-  strengths: string[];
-  gaps: string[];
-  requirements: Requirements;
-  ats_keywords: ATSKeywords;
-  recommendations: string[];
-  cover_letter: string;
-  company_name: string | null;
-  application_link: string | null;
-  contact_email: string | null;
-  created_at: string;
-  job_description: string;
-}
+import { Analysis } from '@/types';
 
 function getScoreColor(score: number): string {
   if (score >= 90) return 'text-success';
@@ -87,11 +58,39 @@ export default async function ResultsPage({
   const typedAnalysis = analysis as Analysis;
 
   return (
-    <div className="max-w-[860px] mx-auto">
+    <div className="max-w-215 mx-auto">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
+      {/* Header */}
+      <div className="mb-8">
+        {/* Desktop layout — side by side */}
+        <div className="hidden md:flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              {typedAnalysis.company_name && (
+                <span className="text-sm text-text-muted">
+                  {typedAnalysis.company_name}
+                </span>
+              )}
+              <span className="text-text-muted text-sm">·</span>
+              <span className="text-sm text-text-muted">
+                {formatDate(typedAnalysis.created_at)}
+              </span>
+            </div>
+            <h1 className="text-[26px] font-extrabold text-text-primary tracking-[-0.02em]">
+              Analysis Results
+            </h1>
+          </div>
+          <Button
+            asChild
+            className="bg-gradient-to-br from-brand to-brand-hover text-white font-bold shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85 transition-opacity border-none w-fit"
+          >
+            <Link href="/analyze">+ New Analysis</Link>
+          </Button>
+        </div>
+
+        {/* Mobile layout — centered */}
+        <div className="flex md:hidden flex-col items-center text-center gap-1">
+          <div className="flex items-center gap-2">
             {typedAnalysis.company_name && (
               <span className="text-sm text-text-muted">
                 {typedAnalysis.company_name}
@@ -106,21 +105,14 @@ export default async function ResultsPage({
             Analysis Results
           </h1>
         </div>
-        <Button
-          asChild
-          className="bg-gradient-to-br from-brand to-brand-hover text-white font-bold shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85 transition-opacity border-none w-fit"
-        >
-          <Link href="/analyze">+ New Analysis</Link>
-        </Button>
       </div>
-
       {/* Score card */}
       <Card className="bg-bg-card border-border-default mb-6">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row md:items-center gap-6">
             {/* Score circle */}
             <div
-              className="flex flex-col items-center justify-center w-[120px] h-[120px] rounded-full border-4 shrink-0 mx-auto md:mx-0"
+              className="flex flex-col items-center justify-center w-30 h-30 rounded-full border-4 shrink-0 mx-auto md:mx-0"
               style={{
                 borderColor:
                   typedAnalysis.score >= 90
@@ -403,14 +395,13 @@ export default async function ResultsPage({
       <div className="flex flex-col sm:flex-row gap-3 justify-center pb-8">
         <Button
           asChild
-          className="bg-gradient-to-br from-brand to-brand-hover text-white font-bold shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85 transition-opacity border-none"
+          className="bg-linear-to-br from-brand to-brand-hover text-white font-bold shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85 transition-opacity border-none"
         >
           <Link href="/analyze">+ New Analysis</Link>
         </Button>
         <Button
           asChild
-          variant="outline"
-          className="border-border-default text-text-secondary hover:text-text-primary hover:bg-bg-elevated"
+          className="bg-bg-card border border-border-default text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-all duration-200"
         >
           <Link href="/history">View History</Link>
         </Button>
