@@ -213,7 +213,7 @@ export default function AnalyzePage() {
                 value={resumeText}
                 onChange={(e) => setResumeText(e.target.value)}
                 disabled={loading}
-                className="min-h-80 bg-bg-input border-border-default text-text-primary placeholder:text-text-muted resize-none focus:border-border-focus"
+                className="h-80 bg-bg-input border-border-default text-text-primary placeholder:text-text-muted resize-none focus:border-border-focus overflow-y-auto"
               />
             </TabsContent>
 
@@ -317,7 +317,7 @@ export default function AnalyzePage() {
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
             disabled={loading}
-            className="min-h-95 bg-bg-input border-border-default text-text-primary placeholder:text-text-muted resize-none focus:border-border-focus"
+            className="h-95 bg-bg-input border-border-default text-text-primary placeholder:text-text-muted resize-none focus:border-border-focus overflow-y-auto"
           />
         </div>
       </div>
