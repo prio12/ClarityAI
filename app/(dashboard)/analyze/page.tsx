@@ -133,6 +133,29 @@ export default function AnalyzePage() {
       return;
     }
 
+    // in handleAnalyze:
+
+    // exact match check
+    if (resumeText.trim() === jobDescription.trim()) {
+      setError(
+        'Resume and job description are identical. Please check your inputs.'
+      );
+      return;
+    }
+
+    // similarity check
+    const words1 = new Set(resumeText.toLowerCase().split(/\s+/));
+    const words2 = new Set(jobDescription.toLowerCase().split(/\s+/));
+    const intersection = [...words1].filter((w) => words2.has(w));
+    const similarity = intersection.length / Math.max(words1.size, words2.size);
+
+    if (similarity > 0.85) {
+      setError(
+        'Your resume and job description look too similar. Please make sure you pasted the correct content in each field.'
+      );
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -220,7 +243,7 @@ export default function AnalyzePage() {
       {/* Error */}
       {error && (
         <div
-          className="px-4 py-3 rounded-[10px] mb-6 border border-[rgba(239,68,68,.25)] text-danger-light text-sm"
+          className="px-4 py-3 hidden md:block lg:block rounded-[10px] mb-6 border border-[rgba(239,68,68,.25)] text-danger-light text-sm"
           style={{ background: 'rgba(239,68,68,.08)' }}
         >
           {error}
@@ -410,6 +433,15 @@ export default function AnalyzePage() {
       </div>
 
       {/* Analyze button */}
+
+      {error && (
+        <div
+          className="px-4 py-3 sm:block md:hidden lg:hidden rounded-[10px] mb-6 border border-[rgba(239,68,68,.25)] text-danger-light text-sm"
+          style={{ background: 'rgba(239,68,68,.08)' }}
+        >
+          {error}
+        </div>
+      )}
       <div className="flex flex-col items-center gap-3">
         <LoadingButton
           loading={loading}
