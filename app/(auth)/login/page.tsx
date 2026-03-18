@@ -54,6 +54,16 @@ export default function LoginPage() {
     });
   };
 
+  const handleGithubAuth = async (): Promise<void> => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+  };
+
   return (
     <div className="flex min-h-screen">
       {/* Left — Branding, desktop only */}
@@ -177,8 +187,9 @@ export default function LoginPage() {
             </button>
 
             <button
+              onClick={handleGithubAuth}
               disabled={loading}
-              className={`w-full px-4 py-[11px] rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium flex items-center justify-center gap-2.5 transition-all duration-200 ${
+              className={`w-full px-4 py-2.75 rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium flex items-center justify-center gap-2.5 transition-all duration-200 ${
                 loading
                   ? 'opacity-40 cursor-not-allowed'
                   : 'cursor-pointer hover:border-border-hover'

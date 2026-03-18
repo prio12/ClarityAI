@@ -22,16 +22,6 @@ export default function SignupPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const handleGoogleAuth = async (): Promise<void> => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-  };
-
   const handleSubmit = async (): Promise<void> => {
     setError('');
     if (form.password !== form.confirmPassword) {
@@ -64,6 +54,26 @@ export default function SignupPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleAuth = async (): Promise<void> => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+  };
+
+  const handleGithubAuth = async (): Promise<void> => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
   };
 
   return (
@@ -227,6 +237,7 @@ export default function SignupPage() {
             </button>
 
             <button
+              onClick={handleGithubAuth}
               disabled={loading}
               className={`w-full px-4 py-2.75 rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium flex items-center justify-center gap-2.5 transition-all duration-200 ${
                 loading
