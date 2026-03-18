@@ -131,7 +131,7 @@ export default async function HistoryPage() {
                   <span className="text-sm font-semibold text-text-primary truncate">
                     {analysis.company_name
                       ? `@ ${analysis.company_name}`
-                      : 'Analysis'}
+                      : `Analysis · ${formatDate(analysis.created_at)}`}
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-text-muted">

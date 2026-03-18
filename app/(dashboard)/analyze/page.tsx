@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import LoadingButton from '@/components/shared/LoadingButton';
 import { createClient } from '@/lib/supabase/client';
+import AnalysisLoader from '@/components/dashboard/AnalysisLoader';
 
 export default function AnalyzePage() {
   const router = useRouter();
@@ -187,6 +188,10 @@ export default function AnalyzePage() {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <AnalysisLoader />;
+  }
 
   return (
     <div className="max-w-215 mx-auto">
