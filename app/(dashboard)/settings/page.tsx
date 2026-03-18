@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useRouter } from 'next/navigation';
 import type { Profile } from '@/types';
+import { User } from '@supabase/supabase-js';
 
 interface SettingsForm {
   name: string;
@@ -36,6 +37,8 @@ export default function SettingsPage() {
   const [passwordLoading, setPasswordLoading] = useState<boolean>(false);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+  const [isOAuthUser, setIsOAuthUser] = useState<boolean | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchProfile = async (): Promise<void> => {
@@ -46,6 +49,7 @@ export default function SettingsPage() {
       if (!user) return;
 
       setEmail(user.email ?? '');
+      setUser(user);
 
       const { data } = await supabase
         .from('profiles')
@@ -57,6 +61,12 @@ export default function SettingsPage() {
         setProfile(data);
         setForm({ name: data.name ?? '' });
       }
+
+      const identities = user.identities ?? [];
+      const hasOAuthIdentity = identities.some(
+        (i) => i.provider === 'google' || i.provider === 'github'
+      );
+      setIsOAuthUser(hasOAuthIdentity);
     };
 
     fetchProfile();
@@ -243,82 +253,102 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Password section */}
-      <Card className="bg-bg-card border-border-default mb-6">
-        <CardHeader className="pb-3 pt-5 px-6">
-          <CardTitle className="text-[15px] font-bold text-text-primary">
-            Change Password
-          </CardTitle>
-        </CardHeader>
-        <Separator className="bg-border-subtle" />
-        <CardContent className="px-6 py-5 flex flex-col gap-4">
-          {passwordSuccess && (
-            <Alert className="border-[rgba(16,185,129,.25)] bg-[rgba(16,185,129,.08)]">
-              <AlertDescription className="text-success text-sm">
-                {passwordSuccess}
-              </AlertDescription>
-            </Alert>
-          )}
+      {/* Password section — conditional */}
+      {isOAuthUser === null ? null : isOAuthUser ? (
+        <Card className="bg-bg-card border-border-default mb-6">
+          <CardHeader className="pb-3 pt-5 px-6">
+            <CardTitle className="text-[15px] font-bold text-text-primary">
+              Password
+            </CardTitle>
+          </CardHeader>
+          <Separator className="bg-border-subtle" />
+          <CardContent className="px-6 py-5">
+            <p className="text-sm text-text-muted">
+              You signed in with{' '}
+              <span className="text-text-secondary font-medium capitalize">
+                {user?.identities?.[0]?.provider ?? 'a social provider'}
+              </span>
+              . Password management is handled by your provider.
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="bg-bg-card border-border-default mb-6">
+          <CardHeader className="pb-3 pt-5 px-6">
+            <CardTitle className="text-[15px] font-bold text-text-primary">
+              Change Password
+            </CardTitle>
+          </CardHeader>
+          <Separator className="bg-border-subtle" />
+          <CardContent className="px-6 py-5 flex flex-col gap-4">
+            {passwordSuccess && (
+              <Alert className="border-[rgba(16,185,129,.25)] bg-[rgba(16,185,129,.08)]">
+                <AlertDescription className="text-success text-sm">
+                  {passwordSuccess}
+                </AlertDescription>
+              </Alert>
+            )}
 
-          {passwordError && (
-            <Alert className="border-[rgba(239,68,68,.25)] bg-[rgba(239,68,68,.08)]">
-              <AlertDescription className="text-danger-light text-sm">
-                {passwordError}
-              </AlertDescription>
-            </Alert>
-          )}
+            {passwordError && (
+              <Alert className="border-[rgba(239,68,68,.25)] bg-[rgba(239,68,68,.08)]">
+                <AlertDescription className="text-danger-light text-sm">
+                  {passwordError}
+                </AlertDescription>
+              </Alert>
+            )}
 
-          <div className="flex flex-col gap-1.5">
-            <Label className="text-[13px] font-medium text-text-secondary">
-              New Password
-            </Label>
-            <Input
-              type="password"
-              placeholder="Min. 8 characters"
-              value={passwordForm.newPassword}
-              onChange={(e) =>
-                setPasswordForm({
-                  ...passwordForm,
-                  newPassword: e.target.value,
-                })
-              }
+            <div className="flex flex-col gap-1.5">
+              <Label className="text-[13px] font-medium text-text-secondary">
+                New Password
+              </Label>
+              <Input
+                type="password"
+                placeholder="Min. 8 characters"
+                value={passwordForm.newPassword}
+                onChange={(e) =>
+                  setPasswordForm({
+                    ...passwordForm,
+                    newPassword: e.target.value,
+                  })
+                }
+                disabled={passwordLoading}
+                className="bg-bg-input border-border-default text-text-primary placeholder:text-text-muted focus:border-border-focus"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label className="text-[13px] font-medium text-text-secondary">
+                Confirm New Password
+              </Label>
+              <Input
+                type="password"
+                placeholder="Repeat new password"
+                value={passwordForm.confirmPassword}
+                onChange={(e) =>
+                  setPasswordForm({
+                    ...passwordForm,
+                    confirmPassword: e.target.value,
+                  })
+                }
+                disabled={passwordLoading}
+                className="bg-bg-input border-border-default text-text-primary placeholder:text-text-muted focus:border-border-focus"
+              />
+            </div>
+
+            <Button
+              onClick={handleUpdatePassword}
               disabled={passwordLoading}
-              className="bg-bg-input border-border-default text-text-primary placeholder:text-text-muted focus:border-border-focus"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <Label className="text-[13px] font-medium text-text-secondary">
-              Confirm New Password
-            </Label>
-            <Input
-              type="password"
-              placeholder="Repeat new password"
-              value={passwordForm.confirmPassword}
-              onChange={(e) =>
-                setPasswordForm({
-                  ...passwordForm,
-                  confirmPassword: e.target.value,
-                })
-              }
-              disabled={passwordLoading}
-              className="bg-bg-input border-border-default text-text-primary placeholder:text-text-muted focus:border-border-focus"
-            />
-          </div>
-
-          <Button
-            onClick={handleUpdatePassword}
-            disabled={passwordLoading}
-            className={`w-fit cursor-pointer ${
-              passwordLoading
-                ? 'bg-bg-input text-text-muted cursor-not-allowed'
-                : 'bg-linear-to-br from-brand to-brand-hover text-white shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85'
-            } transition-opacity border-none font-bold`}
-          >
-            {passwordLoading ? 'Updating...' : 'Update Password'}
-          </Button>
-        </CardContent>
-      </Card>
+              className={`w-fit cursor-pointer ${
+                passwordLoading
+                  ? 'bg-bg-input text-text-muted cursor-not-allowed'
+                  : 'bg-linear-to-br from-brand to-brand-hover text-white shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85'
+              } transition-opacity border-none font-bold`}
+            >
+              {passwordLoading ? 'Updating...' : 'Update Password'}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Danger zone */}
       <Card className="bg-bg-card border-[rgba(239,68,68,.25)] mb-8">
