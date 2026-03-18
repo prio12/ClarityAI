@@ -19,6 +19,7 @@ export default function AnalyzePage() {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [lastResume, setLastResume] = useState<string>('');
+  const [pdfLoading, setPdfLoading] = useState<boolean>(false);
 
   //to let the user use previous resume
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function AnalyzePage() {
 
     setError('');
     setFileName(file.name);
-    setLoading(true);
+    setPdfLoading(true);
 
     try {
       const text = await extractTextFromPDF(file);
@@ -108,7 +109,7 @@ export default function AnalyzePage() {
       setError('Failed to read PDF. Please paste your resume manually.');
       setFileName('');
     } finally {
-      setLoading(false);
+      setPdfLoading(false);
     }
   };
 
@@ -150,6 +151,13 @@ export default function AnalyzePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resumeText, jobDescription }),
       });
+
+      if (response.status === 429) {
+        setError(
+          'Our AI is temporarily busy. Please try again in a few minutes.'
+        );
+        return;
+      }
 
       if (!response.ok) {
         setError('Analysis failed. Please try again.');
@@ -279,7 +287,38 @@ export default function AnalyzePage() {
                   className="hidden"
                 />
 
-                {fileName ? (
+                {pdfLoading ? (
+                  // parsing state
+                  <div className="flex flex-col items-center gap-3">
+                    <svg
+                      className="w-8 h-8 animate-spin text-brand"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                    <div className="text-center">
+                      <p className="text-sm font-semibold text-text-primary">
+                        Parsing your resume...
+                      </p>
+                      <p className="text-xs text-text-muted mt-1">
+                        Taking too long? Close and paste your text manually.
+                      </p>
+                    </div>
+                  </div>
+                ) : fileName ? (
                   <>
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center border border-[rgba(59,130,246,.2)]"
