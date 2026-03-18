@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useScrolled } from '@/hooks/useScrolled';
 import { scrollTo } from '@/lib/scrollTo';
+import Link from 'next/link';
 
 export default function Nav() {
   const scrolled = useScrolled();
@@ -64,9 +65,12 @@ export default function Nav() {
         <div className="flex items-center gap-3">
           {/* Desktop CTA */}
           {isMobile === false && (
-            <button className="inline-flex items-center px-5 py-2.25 rounded-[10px] bg-linear-to-br from-brand to-brand-hover text-white text-sm font-semibold border-none cursor-pointer shadow-[0_0_16px_rgba(59,130,246,0.25)] transition-opacity duration-200 hover:opacity-85">
-              Get Started Free
-            </button>
+            <Link href="/signup">
+              {' '}
+              <button className="inline-flex items-center px-5 py-2.25 rounded-[10px] bg-linear-to-br from-brand to-brand-hover text-white text-sm font-semibold border-none cursor-pointer shadow-[0_0_16px_rgba(59,130,246,0.25)] transition-opacity duration-200 hover:opacity-85">
+                Get Started Free
+              </button>
+            </Link>
           )}
 
           {/* Hamburger */}
@@ -110,12 +114,14 @@ export default function Nav() {
                 {l.label}
               </span>
             ))}
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="mt-4 px-6 py-3.25 rounded-[10px] bg-linear-to-br from-brand to-brand-hover text-white text-[15px] font-semibold border-none cursor-pointer w-full shadow-[0_0_16px_rgba(59,130,246,0.25)]"
-            >
-              Get Started Free
-            </button>
+            <Link href="/signup">
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="mt-4 px-6 py-3.25 rounded-[10px] bg-linear-to-br from-brand to-brand-hover text-white text-[15px] font-semibold border-none cursor-pointer w-full shadow-[0_0_16px_rgba(59,130,246,0.25)]"
+              >
+                Get Started Free
+              </button>
+            </Link>
           </div>
         </div>
       )}

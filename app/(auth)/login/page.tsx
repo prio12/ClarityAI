@@ -44,6 +44,16 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoogleAuth = async (): Promise<void> => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+  };
+
   return (
     <div className="flex min-h-screen">
       {/* Left — Branding, desktop only */}
@@ -137,6 +147,7 @@ export default function LoginPage() {
           {/* OAuth */}
           <div className="flex flex-col gap-2.5 mb-6">
             <button
+              onClick={handleGoogleAuth}
               disabled={loading}
               className={`w-full px-4 py-2.75 rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium flex items-center justify-center gap-2.5 transition-all duration-200 ${
                 loading

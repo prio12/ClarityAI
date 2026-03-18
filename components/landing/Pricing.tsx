@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
 import { FadeIn } from '@/components/shared/FadeIn';
+import Link from 'next/link';
 
 const freePerks = [
   'Unlimited resume analyses',
@@ -114,9 +115,12 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              <button className="block w-full text-center px-6 py-3 rounded-xl font-bold text-sm border-none cursor-pointer bg-linear-to-br from-brand to-brand-hover text-white transition-opacity duration-200 shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85">
+              <Link
+                href="/signup"
+                className="block w-full text-center px-6 py-3 rounded-xl font-bold text-sm border-none cursor-pointer bg-linear-to-br from-brand to-brand-hover text-white transition-opacity duration-200 shadow-[0_0_20px_rgba(59,130,246,.25)] hover:opacity-85"
+              >
                 Get Started Free
-              </button>
+              </Link>
             </div>
           </FadeIn>
 

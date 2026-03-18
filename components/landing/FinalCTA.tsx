@@ -2,6 +2,7 @@
 'use client';
 import { FadeIn } from '@/components/shared/FadeIn';
 import { Ic } from '@/components/shared/Icons';
+import Link from 'next/link';
 
 export default function FinalCTA() {
   return (
@@ -36,7 +37,8 @@ export default function FinalCTA() {
               analysis is free — no credit card, no commitment.
             </p>
 
-            <button
+            <Link
+              href="/signup"
               className="inline-flex items-center gap-2.5 px-8 py-4 rounded-[14px] bg-linear-to-br from-brand to-brand-hover text-white font-bold text-base border-none cursor-pointer"
               style={{
                 boxShadow:
@@ -44,7 +46,7 @@ export default function FinalCTA() {
               }}
             >
               Analyze Your Resume Free <Ic.Arrow />
-            </button>
+            </Link>
 
             <p className="mt-4 text-[13px] text-text-secondary">
               No credit card required · Free during beta
