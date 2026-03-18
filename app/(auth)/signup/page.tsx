@@ -48,7 +48,7 @@ export default function SignupPage() {
       }
 
       //redirect to the dashboard
-      router.push('/dashboard');
+      router.push('/check-email');
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {

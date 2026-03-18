@@ -26,25 +26,28 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  // check if user is logged in
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = request.nextUrl.pathname;
+
+  // public routes — never redirect these
+  const isPublicRoute =
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup') ||
+    pathname.startsWith('/auth') ||
+    pathname.startsWith('/check-email');
+
   // not logged in + trying to access protected route → redirect to login
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/signup')
-  ) {
+  if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
   // already logged in + trying to access login/signup → redirect to dashboard
   if (
     user &&
-    (request.nextUrl.pathname.startsWith('/login') ||
-      request.nextUrl.pathname.startsWith('/signup'))
+    (pathname.startsWith('/login') || pathname.startsWith('/signup'))
   ) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
@@ -62,5 +65,7 @@ export const config = {
     '/settings/:path*',
     '/login',
     '/signup',
+    '/check-email',
+    '/auth/:path*',
   ],
 };
