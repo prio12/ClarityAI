@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import AddJobDialog from '@/components/dashboard/AddJobDialog';
 import type { JobApplication, JobStatus } from '@/types';
+import JobNotes from './JobNotes';
 
 interface TrackerClientProps {
   initialApplications: JobApplication[];
@@ -306,11 +307,7 @@ export default function TrackerClient({
                   </p>
 
                   {/* Notes preview */}
-                  {job.notes && (
-                    <p className="text-xs text-text-muted leading-[1.6] line-clamp-2 mb-3">
-                      {job.notes}
-                    </p>
-                  )}
+                  {job.notes && <JobNotes notes={job.notes} />}
 
                   {/* Job URL */}
                   {job.job_url && (
