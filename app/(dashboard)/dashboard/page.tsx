@@ -5,14 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getScoreBadgeVariant, getScoreColor } from '@/lib/utilities/score';
 
-interface Analysis {
-  id: string;
-  job_title: string;
-  company: string;
-  score: number;
-  created_at: string;
-}
-
 function getGreeting(): string {
   const hour = new Date().getHours();
   if (hour < 12) return 'Good morning';
@@ -39,26 +31,33 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
   const email = user?.email ?? '';
 
-  const { data: analyses } = await supabase
+  // Query 1 — ALL analyses for correct stats
+  const { data: allAnalyses } = await supabase
+    .from('analyses')
+    .select('score')
+    .eq('user_id', user?.id ?? '');
+
+  // Query 2 — only 3 recent for the list
+  const { data: recentAnalyses } = await supabase
     .from('analyses')
     .select('id, company_name, score, created_at')
     .eq('user_id', user?.id ?? '')
     .order('created_at', { ascending: false })
     .limit(3);
 
-  const hasAnalyses = analyses && analyses.length > 0;
+  const hasAnalyses = recentAnalyses && recentAnalyses.length > 0;
 
   const stats = {
-    total: analyses?.length ?? 0,
+    total: allAnalyses?.length ?? 0,
     average:
-      analyses && analyses.length > 0
+      allAnalyses && allAnalyses.length > 0
         ? Math.round(
-            analyses.reduce((a, b) => a + b.score, 0) / analyses.length
+            allAnalyses.reduce((a, b) => a + b.score, 0) / allAnalyses.length
           )
         : 0,
     best:
-      analyses && analyses.length > 0
-        ? Math.max(...analyses.map((a) => a.score))
+      allAnalyses && allAnalyses.length > 0
+        ? Math.max(...allAnalyses.map((a) => a.score))
         : 0,
   };
 
@@ -158,12 +157,12 @@ export default async function DashboardPage() {
           </div>
 
           <Card className="bg-bg-card border-border-default overflow-hidden">
-            {analyses.map((analysis, index) => (
+            {recentAnalyses.map((analysis, index) => (
               <Link
                 key={analysis.id}
                 href={`/results/${analysis.id}`}
                 className={`flex items-center justify-between px-5 py-4 no-underline hover:bg-bg-elevated transition-colors duration-150 ${
-                  index !== analyses.length - 1
+                  index !== recentAnalyses.length - 1
                     ? 'border-b border-border-subtle'
                     : ''
                 }`}
