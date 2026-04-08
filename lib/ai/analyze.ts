@@ -1,15 +1,53 @@
 import { AnalysisResult } from '@/types';
-import { GoogleGenAI } from '@google/genai';
+import Groq from 'groq-sdk';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+// Initialize Groq with your API Key
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 export async function analyzeResume(
   resumeText: string,
   jobDescription: string
 ): Promise<AnalysisResult> {
-  const prompt = `
-You are an expert resume analyst and career coach. 
-Analyze the resume against the job description and return a JSON object.
+  const systemInstructions = `
+You are an expert resume analyst and career coach.
+
+Your goal is to provide HIGH-QUALITY, HUMAN-LIKE, and INSIGHTFUL analysis.
+
+STYLE GUIDELINES:
+- Write in a natural, professional, slightly conversational tone.
+- Avoid robotic or overly polished "AI-sounding" phrases.
+- Vary sentence structure to feel human.
+- Avoid repeating patterns like "I am excited..." too often.
+- Make the writing feel like it was written by a real candidate, not AI.
+
+COVER LETTER RULES:
+- Write a strong, professional 3-paragraph cover letter.
+- MUST include proper paragraph breaks using "\\n\\n".
+- Keep tone confident but not exaggerated or overly formal.
+- Make it feel personal and realistic, not templated.
+
+Structure:
+1st paragraph → natural introduction + role (avoid clichés)
+2nd paragraph → skills/projects (mention at least one real project if possible, explain impact briefly)
+3rd paragraph → genuine interest + forward-looking closing (not generic)
+
+CRITICAL ENDING RULE:
+- After the 3rd paragraph, you MUST append exactly:
+"\\n\\nRegards,\\n[Your Name]"
+- Do NOT replace [Your Name]
+- Do NOT omit this line
+- Do NOT add anything after it
+
+OUTPUT RULES:
+- Return ONLY valid JSON.
+- No markdown, no explanations.
+- Keep responses detailed but clean.
+`;
+
+  const userPrompt = `
+Analyze the following Resume against the Job Description.
 
 RESUME:
 ${resumeText}
@@ -17,43 +55,59 @@ ${resumeText}
 JOB DESCRIPTION:
 ${jobDescription}
 
-Return ONLY a valid JSON object with exactly this structure, no markdown, no explanation:
+Return a JSON object with this exact structure:
 {
-  "score": <number 0-100 representing overall match>,
-  "strengths": [<3-5 strings of what the resume does well>],
-  "gaps": [<3-5 strings of what is missing or weak>],
+  "score": <number 0-100>,
+  "strengths": [<3-5 specific, non-generic insights>],
+  "gaps": [<3-5 meaningful weaknesses or missing areas>],
   "requirements": {
-    "location": <string if location requirement found, null if not>,
-    "visa": <string if visa requirement found, null if not>,
-    "experience": <string if experience requirement found, null if not>,
-    "certifications": <string if certification requirement found, null if not>
+    "location": <string|null>,
+    "visa": <string|null>,
+    "experience": <string|null>,
+    "certifications": <string|null>
   },
   "ats_keywords": {
-    "matched": [<keywords found in both resume and job description>],
-    "missing": [<important keywords in job description missing from resume>],
-    "match_rate": <number 0-100 representing keyword match percentage>
+    "matched": [<relevant keywords>],
+    "missing": [<important missing keywords>],
+    "match_rate": <number 0-100>
   },
-  "recommendations": [<3-5 specific actionable strings to improve the resume>],
-  "cover_letter": <string, a professional cover letter with [Your Name], [Company Name], [Job Title] as placeholders where needed>,
-  "company_name": <string if company name found in job description, null if not>,
-  "application_link": <string if application URL found in job description, null if not>,
-  "contact_email": <string if contact email found in job description, null if not>
+  "recommendations": [<3-5 actionable improvements>],
+  "cover_letter": <well-formatted 3 paragraph string with "\\n\\n" and ending with "Regards,\\n[Your Name]">,
+  "company_name": <string|null>,
+  "application_link": <string|null>,
+  "contact_email": <string|null>
 }
+
+IMPORTANT:
+- Ensure cover_letter uses proper paragraph spacing with "\\n\\n".
+- Writing should feel natural, slightly conversational, and human.
+- Avoid generic AI-style phrases and repetition.
+- Include the mandatory closing line exactly as specified.
 `;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+  const response = await groq.chat.completions.create({
+    model: 'llama-3.3-70b-versatile',
+    messages: [
+      {
+        role: 'system',
+        content: systemInstructions,
+      },
+      {
+        role: 'user',
+        content: userPrompt,
+      },
+    ],
+    response_format: { type: 'json_object' },
+    temperature: 0.85,
   });
 
-  const text = response.text ?? '';
+  const text = response.choices[0]?.message?.content || '{}';
 
-  // clean the response — remove markdown code blocks if present
-  const cleaned = text
-    .replace(/```json/g, '')
-    .replace(/```/g, '')
-    .trim();
-
-  const result = JSON.parse(cleaned) as AnalysisResult;
-  return result;
+  try {
+    const result = JSON.parse(text.trim()) as AnalysisResult;
+    return result;
+  } catch (error) {
+    console.error('Failed to parse AI response:', error);
+    throw new Error('The AI provided an invalid response. Please try again.');
+  }
 }
