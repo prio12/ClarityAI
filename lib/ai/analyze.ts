@@ -107,6 +107,7 @@ IMPORTANT:
     const result = JSON.parse(text.trim()) as AnalysisResult;
     return result;
   } catch (error) {
+    console.warn('Primary model failed, falling back to Gemini:', error);
     console.error('Failed to parse AI response:', error);
     throw new Error('The AI provided an invalid response. Please try again.');
   }
