@@ -29,6 +29,7 @@ COVER LETTER RULES:
 - Make it feel personal and realistic, not templated.
 
 Structure:
+Opening line → ALWAYS start with "Dear Hiring Manager," on its own line followed by "\\n\\n"
 1st paragraph → natural introduction + role (avoid clichés)
 2nd paragraph → skills/projects (mention at least one real project if possible, explain impact briefly)
 3rd paragraph → genuine interest + forward-looking closing (not generic)
@@ -72,7 +73,7 @@ Return a JSON object with this exact structure:
     "match_rate": <number 0-100>
   },
   "recommendations": [<3-5 actionable improvements>],
-  "cover_letter": <well-formatted 3 paragraph string with "\\n\\n" and ending with "Regards,\\n[Your Name]">,
+  "cover_letter": <string starting with "Dear Hiring Manager,\\n\\n" then 3 paragraphs separated by "\\n\\n" and ending with "\\n\\nRegards,\\n[Your Name]">,
   "company_name": <string|null>,
   "application_link": <string|null>,
   "contact_email": <string|null>
