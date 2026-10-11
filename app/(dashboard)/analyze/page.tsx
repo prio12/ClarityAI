@@ -1,24 +1,24 @@
-'use client';
-import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import LoadingButton from '@/components/shared/LoadingButton';
-import { createClient } from '@/lib/supabase/client';
-import AnalysisLoader from '@/components/dashboard/AnalysisLoader';
+"use client";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LoadingButton from "@/components/shared/LoadingButton";
+import { createClient } from "@/lib/supabase/client";
+import AnalysisLoader from "@/components/dashboard/AnalysisLoader";
 
 export default function AnalyzePage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [resumeText, setResumeText] = useState<string>('');
-  const [jobDescription, setJobDescription] = useState<string>('');
-  const [fileName, setFileName] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [resumeText, setResumeText] = useState<string>("");
+  const [jobDescription, setJobDescription] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [lastResume, setLastResume] = useState<string>('');
+  const [lastResume, setLastResume] = useState<string>("");
   const [pdfLoading, setPdfLoading] = useState<boolean>(false);
 
   //to let the user use previous resume
@@ -31,10 +31,10 @@ export default function AnalyzePage() {
       if (!user) return;
 
       const { data } = await supabase
-        .from('analyses')
-        .select('resume_text')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
+        .from("analyses")
+        .select("resume_text")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
         .limit(1)
         .single();
 
@@ -47,51 +47,51 @@ export default function AnalyzePage() {
   }, []);
 
   const extractTextFromPDF = async (file: File): Promise<string> => {
-    const pdfjsLib = await import('pdfjs-dist');
+    const pdfjsLib = await import("pdfjs-dist");
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-      'pdfjs-dist/build/pdf.worker.mjs',
-      import.meta.url
+      "pdfjs-dist/build/pdf.worker.mjs",
+      import.meta.url,
     ).toString();
 
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
-    let fullText = '';
+    let fullText = "";
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
       const pageText = content.items
         .map((item) => {
-          if (typeof item === 'object' && item !== null && 'str' in item) {
+          if (typeof item === "object" && item !== null && "str" in item) {
             return (item as { str: string }).str;
           }
-          return '';
+          return "";
         })
-        .join(' ');
-      fullText += pageText + '\n';
+        .join(" ");
+      fullText += pageText + "\n";
     }
 
     return fullText.trim();
   };
 
   const handleFileUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.type !== 'application/pdf') {
-      setError('Please upload a PDF file only.');
+    if (file.type !== "application/pdf") {
+      setError("Please upload a PDF file only.");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setError('File size must be under 5MB.');
+      setError("File size must be under 5MB.");
       return;
     }
 
-    setError('');
+    setError("");
     setFileName(file.name);
     setPdfLoading(true);
 
@@ -99,37 +99,37 @@ export default function AnalyzePage() {
       const text = await extractTextFromPDF(file);
       if (!text) {
         setError(
-          'Could not extract text from this PDF. Please paste your resume manually.'
+          "Could not extract text from this PDF. Please paste your resume manually.",
         );
-        setFileName('');
+        setFileName("");
         return;
       }
       setResumeText(text);
     } catch {
-      setError('Failed to read PDF. Please paste your resume manually.');
-      setFileName('');
+      setError("Failed to read PDF. Please paste your resume manually.");
+      setFileName("");
     } finally {
       setPdfLoading(false);
     }
   };
 
   const handleAnalyze = async (): Promise<void> => {
-    setError('');
+    setError("");
 
     if (!resumeText.trim()) {
-      setError('Please add your resume — paste text or upload a PDF.');
+      setError("Please add your resume — paste text or upload a PDF.");
       return;
     }
     if (!jobDescription.trim()) {
-      setError('Please paste the job description.');
+      setError("Please paste the job description.");
       return;
     }
     if (resumeText.trim().length < 100) {
-      setError('Resume text seems too short. Please add more content.');
+      setError("Resume text seems too short. Please add more content.");
       return;
     }
     if (jobDescription.trim().length < 50) {
-      setError('Job description seems too short. Please add more content.');
+      setError("Job description seems too short. Please add more content.");
       return;
     }
 
@@ -138,7 +138,7 @@ export default function AnalyzePage() {
     // exact match check
     if (resumeText.trim() === jobDescription.trim()) {
       setError(
-        'Resume and job description are identical. Please check your inputs.'
+        "Resume and job description are identical. Please check your inputs.",
       );
       return;
     }
@@ -151,7 +151,7 @@ export default function AnalyzePage() {
 
     if (similarity > 0.85) {
       setError(
-        'Your resume and job description look too similar. Please make sure you pasted the correct content in each field.'
+        "Your resume and job description look too similar. Please make sure you pasted the correct content in each field.",
       );
       return;
     }
@@ -165,25 +165,25 @@ export default function AnalyzePage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push('/login');
+        router.push("/login");
         return;
       }
       // call AI via API route
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resumeText, jobDescription }),
       });
 
       if (response.status === 429) {
         setError(
-          'Our AI is temporarily busy. Please try again in a few minutes.'
+          "Our AI is temporarily busy. Please try again in a few minutes.",
         );
         return;
       }
 
       if (!response.ok) {
-        setError('Analysis failed. Please try again.');
+        setError("Analysis failed. Please try again.");
         return;
       }
 
@@ -191,9 +191,10 @@ export default function AnalyzePage() {
 
       // save to database
       const { data, error: dbError } = await supabase
-        .from('analyses')
+        .from("analyses")
         .insert({
           user_id: user.id,
+          model: result.model,
           resume_text: resumeText,
           job_description: jobDescription,
           score: result.score,
@@ -207,18 +208,18 @@ export default function AnalyzePage() {
           application_link: result.application_link,
           contact_email: result.contact_email,
         })
-        .select('id')
+        .select("id")
         .single();
 
       if (dbError) {
-        setError('Failed to save analysis. Please try again.');
+        setError("Failed to save analysis. Please try again.");
         return;
       }
 
       // redirect to results
       router.push(`/results/${data.id}`);
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -244,7 +245,7 @@ export default function AnalyzePage() {
       {error && (
         <div
           className="px-4 py-3 hidden md:block lg:block rounded-[10px] mb-6 border border-[rgba(239,68,68,.25)] text-danger-light text-sm"
-          style={{ background: 'rgba(239,68,68,.08)' }}
+          style={{ background: "rgba(239,68,68,.08)" }}
         >
           {error}
         </div>
@@ -261,7 +262,7 @@ export default function AnalyzePage() {
               <button
                 onClick={() => {
                   setResumeText(lastResume);
-                  setFileName('');
+                  setFileName("");
                 }}
                 className="text-xs text-brand font-medium cursor-pointer bg-transparent border-none hover:opacity-80 transition-opacity"
               >
@@ -300,7 +301,7 @@ export default function AnalyzePage() {
               <div
                 className="min-h-80 rounded-[10px] border-2 border-dashed border-border-default flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-border-focus transition-colors duration-200 px-6"
                 onClick={() => fileInputRef.current?.click()}
-                style={{ background: 'rgba(59,130,246,.03)' }}
+                style={{ background: "rgba(59,130,246,.03)" }}
               >
                 <input
                   ref={fileInputRef}
@@ -345,7 +346,7 @@ export default function AnalyzePage() {
                   <>
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center border border-[rgba(59,130,246,.2)]"
-                      style={{ background: 'rgba(59,130,246,.1)' }}
+                      style={{ background: "rgba(59,130,246,.1)" }}
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -372,10 +373,10 @@ export default function AnalyzePage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        setFileName('');
-                        setResumeText('');
+                        setFileName("");
+                        setResumeText("");
                         if (fileInputRef.current)
-                          fileInputRef.current.value = '';
+                          fileInputRef.current.value = "";
                       }}
                       className="text-xs text-danger-light hover:opacity-80 transition-opacity cursor-pointer bg-transparent border-none"
                     >
@@ -386,7 +387,7 @@ export default function AnalyzePage() {
                   <>
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center border border-[rgba(59,130,246,.2)]"
-                      style={{ background: 'rgba(59,130,246,.08)' }}
+                      style={{ background: "rgba(59,130,246,.08)" }}
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -437,7 +438,7 @@ export default function AnalyzePage() {
       {error && (
         <div
           className="px-4 py-3 sm:block md:hidden lg:hidden rounded-[10px] mb-6 border border-[rgba(239,68,68,.25)] text-danger-light text-sm"
-          style={{ background: 'rgba(239,68,68,.08)' }}
+          style={{ background: "rgba(239,68,68,.08)" }}
         >
           {error}
         </div>

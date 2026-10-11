@@ -1,5 +1,7 @@
-import { AnalysisResult } from '@/types';
-import Groq from 'groq-sdk';
+import { AnalysisResult } from "@/types";
+import Groq from "groq-sdk";
+
+export const GROQ_MODEL = "llama-3.3-70b-versatile";
 
 // Initialize Groq with your API Key
 const groq = new Groq({
@@ -8,7 +10,7 @@ const groq = new Groq({
 
 export async function analyzeResume(
   resumeText: string,
-  jobDescription: string
+  jobDescription: string,
 ): Promise<AnalysisResult> {
   const systemInstructions = `
 You are an expert resume analyst and career coach.
@@ -87,29 +89,30 @@ IMPORTANT:
 `;
 
   const response = await groq.chat.completions.create({
-    model: 'llama-3.3-70b-versatile',
+    model: GROQ_MODEL,
+
     messages: [
       {
-        role: 'system',
+        role: "system",
         content: systemInstructions,
       },
       {
-        role: 'user',
+        role: "user",
         content: userPrompt,
       },
     ],
-    response_format: { type: 'json_object' },
+    response_format: { type: "json_object" },
     temperature: 0.85,
   });
 
-  const text = response.choices[0]?.message?.content || '{}';
+  const text = response.choices[0]?.message?.content || "{}";
 
   try {
     const result = JSON.parse(text.trim()) as AnalysisResult;
     return result;
   } catch (error) {
-    console.warn('Primary model failed, falling back to Gemini:', error);
-    console.error('Failed to parse AI response:', error);
-    throw new Error('The AI provided an invalid response. Please try again.');
+    console.warn("Primary model failed, falling back to Gemini:", error);
+    console.error("Failed to parse AI response:", error);
+    throw new Error("The AI provided an invalid response. Please try again.");
   }
 }

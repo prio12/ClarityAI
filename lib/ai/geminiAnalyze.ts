@@ -1,11 +1,13 @@
-import { AnalysisResult } from '@/types';
-import { GoogleGenAI } from '@google/genai';
+import { AnalysisResult } from "@/types";
+import { GoogleGenAI } from "@google/genai";
+
+export const GEMINI_MODEL = "gemini-2.5-flash";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 export async function analyzeResumeWithGemini(
   resumeText: string,
-  jobDescription: string
+  jobDescription: string,
 ): Promise<AnalysisResult> {
   const prompt = `
 You are an expert resume analyst and career coach. 
@@ -42,16 +44,17 @@ Return ONLY a valid JSON object with exactly this structure, no markdown, no exp
 `;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    model: GEMINI_MODEL,
+
+    contents: [{ role: "user", parts: [{ text: prompt }] }],
   });
 
-  const text = response.text ?? '';
+  const text = response.text ?? "";
 
   // clean the response — remove markdown code blocks if present
   const cleaned = text
-    .replace(/```json/g, '')
-    .replace(/```/g, '')
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
     .trim();
 
   const result = JSON.parse(cleaned) as AnalysisResult;
