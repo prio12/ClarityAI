@@ -2,54 +2,23 @@ import { analyzeResume, GROQ_MODEL } from "@/lib/ai/analyze";
 import { analyzeResumeWithGemini, GEMINI_MODEL } from "@/lib/ai/geminiAnalyze";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  classifyError,
+  getProviderStatusCode,
+  type ErrorType,
+} from "@/lib/ai/classifyError";
 import { NextRequest, NextResponse } from "next/server";
-
-type ErrorType = "capacity_or_rate_limit" | "other";
-
-function getProviderStatusCode(error: unknown): number | null {
-  if (typeof error !== "object" || error === null) return null;
-
-  const value = error as { status?: unknown; statusCode?: unknown };
-  const status = value.status ?? value.statusCode;
-
-  return typeof status === "number" && status >= 100 && status <= 599
-    ? status
-    : null;
-}
-
-function classifyError(error: unknown): ErrorType {
-  const statusCode = getProviderStatusCode(error);
-
-  let message = "";
-
-  if (typeof error === "object" && error !== null && "message" in error) {
-    const value = (error as { message?: unknown }).message;
-
-    if (typeof value === "string") {
-      message = value;
-    }
-  }
-
-  if (
-    (statusCode !== null && [429, 503, 529].includes(statusCode)) ||
-    /rate.?limit|too many requests|quota|resource exhausted|overloaded|capacity|temporarily unavailable/i.test(
-      message,
-    )
-  ) {
-    return "capacity_or_rate_limit";
-  }
-
-  return "other";
-}
 
 async function logFailureSafely({
   userId,
   modelAttempted,
   error,
+  errorType,
 }: {
   userId: string;
-  modelAttempted: string;
+  modelAttempted: string | null;
   error: unknown;
+  errorType?: ErrorType;
 }): Promise<void> {
   try {
     const admin = createAdminClient();
@@ -58,9 +27,10 @@ async function logFailureSafely({
       .from("analysis_failures")
       .insert({
         user_id: userId,
-        error_type: classifyError(error),
+        error_type: errorType ?? classifyError(error),
         model_attempted: modelAttempted,
-        status_code: getProviderStatusCode(error),
+        status_code:
+          modelAttempted === null ? null : getProviderStatusCode(error),
       });
 
     if (insertError) {
@@ -74,6 +44,7 @@ async function logFailureSafely({
 
 export async function POST(request: NextRequest) {
   let userId: string | null = null;
+  let shouldLogUnexpectedError = false;
 
   try {
     // Verify identity from the server-side session.
@@ -107,6 +78,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // From here onward, unexpected application errors should be recorded.
+    shouldLogUnexpectedError = true;
+
     // Attempt the primary provider first.
     try {
       const result = await analyzeResume(resumeText, jobDescription);
@@ -128,20 +102,31 @@ export async function POST(request: NextRequest) {
         model: GEMINI_MODEL,
       });
     } catch (geminiError) {
-      // Log only the final failure, attributed to the last provider attempted.
+      // Log once, after both providers have failed.
       await logFailureSafely({
         userId,
         modelAttempted: GEMINI_MODEL,
         error: geminiError,
       });
 
+      // Prevent the outer catch from recording a duplicate.
+      shouldLogUnexpectedError = false;
+
       return NextResponse.json(
         { error: "Analysis failed. Please try again." },
         { status: 500 },
       );
     }
-  } catch {
-    // Unexpected route errors are not counted as AI provider failures.
+  } catch (error) {
+    if (userId && shouldLogUnexpectedError) {
+      await logFailureSafely({
+        userId,
+        modelAttempted: null,
+        error,
+        errorType: "other",
+      });
+    }
+
     return NextResponse.json(
       { error: "Analysis failed. Please try again." },
       { status: 500 },
