@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
-'use client';
-import { useState } from 'react';
-import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
-import LoadingButton from '@/components/shared/LoadingButton';
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import LoadingButton from "@/components/shared/LoadingButton";
 
 interface SignupForm {
   email: string;
@@ -14,22 +14,22 @@ interface SignupForm {
 
 export default function SignupPage() {
   const [form, setForm] = useState<SignupForm>({
-    email: '',
-    password: '',
-    confirmPassword: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const handleSubmit = async (): Promise<void> => {
-    setError('');
+    setError("");
     if (form.password !== form.confirmPassword) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
     if (form.password.length < 8) {
-      setError('Password must be at least 8 characters.');
+      setError("Password must be at least 8 characters.");
       return;
     }
     setLoading(true);
@@ -37,7 +37,8 @@ export default function SignupPage() {
     try {
       //supabase signup logic here
       const supabase = createClient();
-      const { error } = await supabase.auth.signUp({
+
+      const { data, error } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
       });
@@ -46,11 +47,19 @@ export default function SignupPage() {
         setError(error.message);
         return;
       }
+      if (data.session) {
+        const response = await fetch("/api/signup-attribution", {
+          method: "POST",
+        });
 
-      //redirect to the dashboard
-      router.push('/check-email');
+        if (!response.ok) {
+          console.error("Signup attribution endpoint failed.");
+        }
+      }
+
+      router.push("/check-email");
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -59,7 +68,7 @@ export default function SignupPage() {
   const handleGoogleAuth = async (): Promise<void> => {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
@@ -69,7 +78,7 @@ export default function SignupPage() {
   const handleGithubAuth = async (): Promise<void> => {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
-      provider: 'github',
+      provider: "github",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
@@ -82,7 +91,7 @@ export default function SignupPage() {
       <div
         className="flex-[0_0_45%] border-r border-border-subtle hidden md:flex flex-col justify-center px-14 py-16 relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #0F172A 0%, #0A0A0A 60%)',
+          background: "linear-gradient(160deg, #0F172A 0%, #0A0A0A 60%)",
         }}
       >
         {/* Orb */}
@@ -90,7 +99,7 @@ export default function SignupPage() {
           className="absolute top-[20%] left-[30%] w-100 h-100 rounded-full pointer-events-none blur-[30px]"
           style={{
             background:
-              'radial-gradient(circle, rgba(59,130,246,.10) 0%, transparent 70%)',
+              "radial-gradient(circle, rgba(59,130,246,.10) 0%, transparent 70%)",
           }}
         />
 
@@ -108,7 +117,7 @@ export default function SignupPage() {
 
         <h2
           className="font-black text-text-primary leading-[1.15] tracking-[-0.03em] mb-4"
-          style={{ fontSize: 'clamp(28px,3vw,38px)' }}
+          style={{ fontSize: "clamp(28px,3vw,38px)" }}
         >
           Land more interviews.
           <br />
@@ -124,15 +133,15 @@ export default function SignupPage() {
 
         {/* Perks */}
         {[
-          'Unlimited resume analyses during beta',
-          'AI match score + full breakdown',
-          'Actionable recommendations instantly',
-          'ATS optimization tips included',
+          "Unlimited resume analyses during beta",
+          "AI match score + full breakdown",
+          "Actionable recommendations instantly",
+          "ATS optimization tips included",
         ].map((perk) => (
           <div key={perk} className="flex items-center gap-3 mb-4">
             <div
               className="w-5 h-5 rounded-full shrink-0 flex items-center justify-center border border-[rgba(59,130,246,.3)]"
-              style={{ background: 'rgba(59,130,246,.15)' }}
+              style={{ background: "rgba(59,130,246,.15)" }}
             >
               <svg
                 viewBox="0 0 24 24"
@@ -155,7 +164,7 @@ export default function SignupPage() {
         {/* Testimonial */}
         <div
           className="mt-12 p-5 rounded-[14px] border border-[rgba(59,130,246,.15)]"
-          style={{ background: 'rgba(59,130,246,.06)' }}
+          style={{ background: "rgba(59,130,246,.06)" }}
         >
           <p className="text-[13px] text-text-secondary leading-[1.65] mb-3">
             "Added missing keywords, got 3 interviews in one week."
@@ -163,7 +172,7 @@ export default function SignupPage() {
           <div className="flex items-center gap-2">
             <div
               className="w-7 h-7 rounded-full flex items-center justify-center"
-              style={{ background: 'rgba(59,130,246,.2)' }}
+              style={{ background: "rgba(59,130,246,.2)" }}
             >
               <span className="text-[11px] font-bold text-brand-light">SK</span>
             </div>
@@ -211,8 +220,8 @@ export default function SignupPage() {
               disabled={loading}
               className={`w-full px-4 py-2.75 rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium flex items-center justify-center gap-2.5 transition-all duration-200 ${
                 loading
-                  ? 'opacity-40 cursor-not-allowed'
-                  : 'cursor-pointer hover:border-border-hover'
+                  ? "opacity-40 cursor-not-allowed"
+                  : "cursor-pointer hover:border-border-hover"
               }`}
             >
               <svg viewBox="0 0 24 24" className="w-4.5 h-4.5">
@@ -241,8 +250,8 @@ export default function SignupPage() {
               disabled={loading}
               className={`w-full px-4 py-2.75 rounded-[10px] bg-bg-card border border-border-default text-text-primary text-sm font-medium flex items-center justify-center gap-2.5 transition-all duration-200 ${
                 loading
-                  ? 'opacity-40 cursor-not-allowed'
-                  : 'cursor-pointer hover:border-border-hover'
+                  ? "opacity-40 cursor-not-allowed"
+                  : "cursor-pointer hover:border-border-hover"
               }`}
             >
               <svg
@@ -267,7 +276,7 @@ export default function SignupPage() {
           {error && (
             <div
               className="px-3.5 py-2.5 rounded-lg mb-4 border border-[rgba(239,68,68,.25)] text-danger-light text-[13px]"
-              style={{ background: 'rgba(239,68,68,.08)' }}
+              style={{ background: "rgba(239,68,68,.08)" }}
             >
               {error}
             </div>
@@ -286,7 +295,7 @@ export default function SignupPage() {
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 disabled={loading}
                 className={`w-full px-3.5 py-2.5 rounded-[10px] bg-bg-input border border-border-default text-text-primary text-sm outline-none box-border transition-colors duration-200 focus:border-border-focus ${
-                  loading ? 'opacity-40 cursor-not-allowed' : ''
+                  loading ? "opacity-40 cursor-not-allowed" : ""
                 }`}
               />
             </div>
@@ -302,7 +311,7 @@ export default function SignupPage() {
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 disabled={loading}
                 className={`w-full px-3.5 py-2.5 rounded-[10px] bg-bg-input border border-border-default text-text-primary text-sm outline-none box-border transition-colors duration-200 focus:border-border-focus ${
-                  loading ? 'opacity-40 cursor-not-allowed' : ''
+                  loading ? "opacity-40 cursor-not-allowed" : ""
                 }`}
               />
             </div>
@@ -320,7 +329,7 @@ export default function SignupPage() {
                 }
                 disabled={loading}
                 className={`w-full px-3.5 py-2.5 rounded-[10px] bg-bg-input border border-border-default text-text-primary text-sm outline-none box-border transition-colors duration-200 focus:border-border-focus ${
-                  loading ? 'opacity-40 cursor-not-allowed' : ''
+                  loading ? "opacity-40 cursor-not-allowed" : ""
                 }`}
               />
             </div>
@@ -335,7 +344,7 @@ export default function SignupPage() {
           </div>
 
           <p className="text-center text-sm text-text-muted mt-6">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link href="/login" className="text-brand font-medium no-underline">
               Sign in
             </Link>
